@@ -3,12 +3,14 @@ package su.litvak.minidlna.model;
 import org.teleal.cling.support.model.DIDLObject;
 import org.teleal.cling.support.model.WriteStatus;
 import org.teleal.cling.support.model.container.Container;
+import su.litvak.minidlna.provider.ContentProvider;
 
 import java.io.File;
 
 public class FolderNode extends ContainerNode {
     final File folder;
     final String title;
+    ContentProvider contentProvider;
 
     public FolderNode(ContainerNode parent, String id, String title, File folder) {
         super(parent, id);
@@ -26,6 +28,15 @@ public class FolderNode extends ContainerNode {
         container.setWriteStatus(WriteStatus.NOT_WRITABLE);
         container.setChildCount(Integer.valueOf(0));
         return parent.addChild(container);
+    }
+
+    @Override
+    public ContentProvider getContentProvider() {
+        return contentProvider == null ? parent.getContentProvider() : contentProvider;
+    }
+
+    public void setContentProvider(ContentProvider contentProvider) {
+        this.contentProvider = contentProvider;
     }
 
     public File getFolder() {

@@ -3,6 +3,7 @@ package su.litvak.minidlna.model;
 import org.teleal.cling.support.model.DIDLObject;
 import org.teleal.cling.support.model.container.Container;
 import org.teleal.cling.support.model.item.Item;
+import su.litvak.minidlna.provider.ContentProvider;
 
 public abstract class ContainerNode extends ContentNode {
     private Container container;
@@ -20,6 +21,8 @@ public abstract class ContainerNode extends ContentNode {
     }
 
     abstract Container createContainer();
+
+    public abstract ContentProvider getContentProvider();
 
     final <T extends DIDLObject> T addChild(T node) {
         if (node instanceof Item) {

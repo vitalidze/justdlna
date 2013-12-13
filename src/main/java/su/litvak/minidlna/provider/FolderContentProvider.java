@@ -24,6 +24,7 @@ public class FolderContentProvider implements ContentProvider {
                                  @JsonProperty("format") Class<? extends MediaFormat> format) {
         this.title = title;
         this.folder = new FolderNode(RootNode.get(), contentId(format, folder), title, folder);
+        this.folder.setContentProvider(this);
         this.format = format;
     }
 

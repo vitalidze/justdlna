@@ -38,6 +38,7 @@ public class ContentDirectoryService extends AbstractContentDirectoryService {
             }
 
             final ContainerNode containerNode = (ContainerNode) contentNode;
+            containerNode.getContentProvider().getChildren(containerNode);
             final Container contentContainer = containerNode.getContainer();
 
             if (browseFlag == BrowseFlag.METADATA) {
