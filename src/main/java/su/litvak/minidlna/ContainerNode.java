@@ -14,6 +14,7 @@ public abstract class ContainerNode extends ContentNode {
     public final Container getContainer() {
         if (container == null) {
             container = createContainer();
+            NodeMap.get().put(id, this);
         }
         return container;
     }
