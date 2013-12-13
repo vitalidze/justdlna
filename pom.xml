@@ -10,12 +10,21 @@
     <packaging>jar</packaging>
 
     <properties>
+        <cling.version>1.0.5</cling.version>
         <logback.version>1.0.9</logback.version>
         <slf4j.version>1.7.2</slf4j.version>
         <jackson.version>1.9.13</jackson.version>
     </properties>
 
     <dependencies>
+        <!-- Cling -->
+        <dependency>
+            <groupId>org.teleal.cling</groupId>
+            <artifactId>cling-support</artifactId>
+            <version>${cling.version}</version>
+        </dependency>
+
+
         <!-- Logging -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
