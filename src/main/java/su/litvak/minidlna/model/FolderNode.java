@@ -1,4 +1,4 @@
-package su.litvak.minidlna;
+package su.litvak.minidlna.model;
 
 import org.teleal.cling.support.model.DIDLObject;
 import org.teleal.cling.support.model.WriteStatus;

@@ -1,7 +1,8 @@
-package su.litvak.minidlna;
+package su.litvak.minidlna.model;
 
 import org.teleal.cling.support.model.WriteStatus;
 import org.teleal.cling.support.model.container.Container;
+import su.litvak.minidlna.Config;
 
 public class RootNode extends ContainerNode {
     private final static RootNode ROOT_NODE = new RootNode();

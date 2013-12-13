@@ -1,4 +1,4 @@
-package su.litvak.minidlna;
+package su.litvak.minidlna.model;
 
 import java.util.HashMap;
 

@@ -1,4 +1,4 @@
-package su.litvak.minidlna;
+package su.litvak.minidlna.model;
 
 import org.teleal.cling.support.model.DIDLObject;
 import org.teleal.cling.support.model.container.Container;
@@ -9,12 +9,12 @@ public abstract class ContainerNode extends ContentNode {
 
     public ContainerNode(ContainerNode parent, String id) {
         super(parent, id);
+        NodeMap.get().put(id, this);
     }
 
     public final Container getContainer() {
         if (container == null) {
             container = createContainer();
-            NodeMap.get().put(id, this);
         }
         return container;
     }
