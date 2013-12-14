@@ -6,6 +6,7 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.teleal.cling.UpnpService;
 import org.teleal.cling.UpnpServiceImpl;
 import su.litvak.justdlna.dlna.MediaServer;
+import su.litvak.justdlna.model.NodesMap;
 import su.litvak.justdlna.model.RootNode;
 
 import java.net.InetAddress;
@@ -23,12 +24,13 @@ public class Main {
 
         LOG.info("Initializing root node...");
         RootNode rootNode = new RootNode(Config.get().getFolders());
+        NodesMap.put(rootNode.getId(), rootNode);
 
         final String hostName = InetAddress.getLocalHost().getHostName();
 
         LOG.info("hostName: {}", hostName);
         final UpnpService upnpService = new UpnpServiceImpl();
-        upnpService.getRegistry().addDevice(new MediaServer(hostName, rootNode).getDevice());
+        upnpService.getRegistry().addDevice(new MediaServer(hostName).getDevice());
     }
 
     public static void bridgeJul() {

@@ -25,7 +25,7 @@ public class MediaServer {
 
 	private final LocalDevice localDevice;
 
-	public MediaServer(final String hostName, final RootNode rootNode) throws ValidationException {
+	public MediaServer(final String hostName) throws ValidationException {
 		final DeviceType type = new UDADeviceType(DEVICE_TYPE, VERSION);
 		final DeviceDetails details = new DeviceDetails(Config.METADATA_MODEL_NAME + " (" + hostName + ")",
 				new ManufacturerDetails(Config.METADATA_MANUFACTURER),
@@ -35,7 +35,7 @@ public class MediaServer {
 		contDirSrv.setManager(new DefaultServiceManager<ContentDirectoryService>(contDirSrv, ContentDirectoryService.class) {
 			@Override
 			protected ContentDirectoryService createServiceInstance () {
-				return new ContentDirectoryService(rootNode);
+				return new ContentDirectoryService();
 			}
 		});
 

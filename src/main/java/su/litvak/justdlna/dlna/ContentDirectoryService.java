@@ -15,19 +15,15 @@ import org.teleal.cling.support.model.item.Item;
 import su.litvak.justdlna.model.ContainerNode;
 import su.litvak.justdlna.model.ContentNode;
 import su.litvak.justdlna.model.ItemNode;
-import su.litvak.justdlna.model.RootNode;
+import su.litvak.justdlna.model.NodesMap;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ContentDirectoryService extends AbstractContentDirectoryService {
     private static final Logger LOG = LoggerFactory.getLogger(ContentDirectoryService.class);
-    Map<String, ContentNode> nodes = new HashMap<String, ContentNode>();
 
-    public ContentDirectoryService (RootNode rootNode) {
+    public ContentDirectoryService() {
         super();
-        nodes.put(rootNode.getId(), rootNode);
     }
 
     @Override
@@ -35,7 +31,7 @@ public class ContentDirectoryService extends AbstractContentDirectoryService {
         LOG.info("browse: {} ({}, {})", objectID, firstResult, maxResults);
         try {
             final DIDLContent didl = new DIDLContent();
-            final ContentNode node = nodes.get(objectID);
+            final ContentNode node = NodesMap.get(objectID);
 
             if (node == null) return new BrowseResult("", 0, 0);
 
@@ -59,7 +55,7 @@ public class ContentDirectoryService extends AbstractContentDirectoryService {
                 final int from = (int) firstResult;
                 final int to = Math.min((int) (firstResult + maxResults), containerNodes.size());
                 for (ContainerNode containerNodeX : containerNodes.subList(from, to)) {
-                    nodes.put(containerNodeX.getId(), containerNodeX);
+                    NodesMap.put(containerNodeX.getId(), containerNodeX);
                     Container containerX = containerNodeX.getContainer();
                     container.addContainer(containerX);
                     didl.addContainer(containerX);
@@ -69,7 +65,7 @@ public class ContentDirectoryService extends AbstractContentDirectoryService {
                 final int from = (int) Math.max(firstResult - container.getContainers().size(), 0);
                 final int to = Math.min(itemNodes.size(), from + (int) (maxResults - didl.getContainers().size()));
                 for (ItemNode itemNode : itemNodes.subList(from, to)) {
-                    nodes.put(itemNode.getId(), itemNode);
+                    NodesMap.put(itemNode.getId(), itemNode);
                     Item item = itemNode.getItem();
                     container.addItem(item);
                     didl.addItem(item);
