@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 import su.litvak.justdlna.model.FolderNode;
 
 import java.io.File;
+import java.net.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -36,6 +39,8 @@ public class Config {
     private int refreshInterval = 10 * 60 * 1000;
 
     private List<FolderNode> folders;
+
+    private String ipAddress;
 
     public static Config get() {
         return INSTANCE;
@@ -78,5 +83,13 @@ public class Config {
 
     public void setFolders(List<FolderNode> folders) {
         this.folders = folders;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 }
