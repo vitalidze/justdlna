@@ -51,6 +51,7 @@ public abstract class ContainerNode extends ContentNode {
     public void setParent(ContainerNode parent) {
         super.setParent(parent);
         parent.getContainer().addContainer(getContainer());
+        parent.getContainer().setChildCount(parent.getContainer().getChildCount().intValue() + 1);
         getContainer().setParentID(parent.getId());
     }
 }

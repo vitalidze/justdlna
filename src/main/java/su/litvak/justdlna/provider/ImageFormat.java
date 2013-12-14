@@ -1,5 +1,9 @@
 package su.litvak.justdlna.provider;
 
+import org.teleal.cling.support.model.Res;
+import org.teleal.cling.support.model.item.ImageItem;
+import org.teleal.cling.support.model.item.Item;
+
 public enum ImageFormat implements MediaFormat {
     JPG("jpg", "image/jpeg"),
     JPEG("jpeg", "image/jpeg"),
@@ -21,5 +25,10 @@ public enum ImageFormat implements MediaFormat {
     @Override
     public String getExt() {
         return ext;
+    }
+
+    @Override
+    public Item createItem(String id, String title, Res res) {
+        return new ImageItem(id, "", title, "", res);
     }
 }

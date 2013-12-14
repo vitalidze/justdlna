@@ -14,10 +14,10 @@ import java.util.List;
 
 import static su.litvak.justdlna.util.HashHelper.sha1;
 
-public class FolderNode extends ContainerNode {
+public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
     final File folder;
     final String title;
-    final Class<? extends MediaFormat> format;
+    final Class<T> format;
 
     @JsonCreator
     public FolderNode(@JsonProperty("title")
@@ -25,14 +25,14 @@ public class FolderNode extends ContainerNode {
                       @JsonProperty("path")
                       File folder,
                       @JsonProperty("format")
-                      Class<? extends MediaFormat> format) {
+                      Class<T> format) {
         super(contentId(format, folder));
         this.folder = folder;
         this.title = title;
         this.format = format;
     }
 
-    public FolderNode(File folder, Class<? extends MediaFormat> format) {
+    public FolderNode(File folder, Class<T> format) {
         super(contentId(format, folder));
         this.folder = folder;
         this.title = folder.getName();
@@ -68,8 +68,19 @@ public class FolderNode extends ContainerNode {
 
     @Override
     public List<ItemNode> getItems() {
-        // TODO
-        return Collections.emptyList();
+        List<ItemNode> result = new ArrayList<ItemNode>();
+        for (File file : folder.listFiles()) {
+            if (file.isFile()) {
+                MediaFormat format = getFormat(file.getName().substring(file.getName().lastIndexOf('.') + 1).toUpperCase(), this.format);
+                if (format == null) {
+                    continue;
+                }
+                ItemNode itemNode = new ItemNode(contentId(this.format, file), file, format);
+                result.add(itemNode);
+                itemNode.setParent(this);
+            }
+        }
+        return result;
     }
 
     public File getFolder() {
@@ -82,5 +93,13 @@ public class FolderNode extends ContainerNode {
 
     private static String getSafeName (final File folder) {
         return folder.getName().replaceAll("[^a-zA-Z0-9]", "_");
+    }
+
+    public static <T extends Enum<T> & MediaFormat> T getFormat(final String value, final Class<T> enumClass) {
+        try {
+            return Enum.valueOf(enumClass, value);
+        } catch (IllegalArgumentException iae) {
+        }
+        return null;
     }
 }

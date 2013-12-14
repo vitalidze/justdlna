@@ -1,5 +1,9 @@
 package su.litvak.justdlna.provider;
 
+import org.teleal.cling.support.model.Res;
+import org.teleal.cling.support.model.item.Item;
+import org.teleal.cling.support.model.item.VideoItem;
+
 public enum VideoFormat implements MediaFormat {
 
     AVI("avi", "video/avi"),
@@ -27,5 +31,10 @@ public enum VideoFormat implements MediaFormat {
     @Override
     public String getExt() {
         return ext;
+    }
+
+    @Override
+    public Item createItem(String id, String title, Res res) {
+        return new VideoItem(id, "", title, "", res);
     }
 }

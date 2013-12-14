@@ -10,6 +10,8 @@ package su.litvak.justdlna.provider;
  * 3) Store map of id-contentnode (NodeMap) in the content directory service
  *
  * 4) Find out when and how directory listing is invoked. Maybe will need to use proxy here.
+ *
+ * 5) Do not store containers and items. Create them lazily. This will help reflect directory changes.
  */
 public class FolderContentProvider {
 }
