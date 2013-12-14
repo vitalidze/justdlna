@@ -59,7 +59,7 @@ public class ContentDirectoryService extends AbstractContentDirectoryService {
                 final int from = (int) firstResult;
                 final int to = Math.min((int) (firstResult + maxResults), containerNodes.size());
                 for (ContainerNode containerNodeX : containerNodes.subList(from, to)) {
-                    nodes.put(node.getId(), node);
+                    nodes.put(containerNodeX.getId(), containerNodeX);
                     Container containerX = containerNodeX.getContainer();
                     container.addContainer(containerX);
                     didl.addContainer(containerX);
