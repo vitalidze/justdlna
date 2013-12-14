@@ -1,4 +1,4 @@
-package su.litvak.justdlna.provider;
+package su.litvak.justdlna.model;
 
 import org.teleal.cling.support.model.Res;
 import org.teleal.cling.support.model.item.Item;

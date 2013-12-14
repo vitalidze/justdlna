@@ -5,7 +5,6 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.teleal.cling.support.model.DIDLObject;
 import org.teleal.cling.support.model.WriteStatus;
 import org.teleal.cling.support.model.container.Container;
-import su.litvak.justdlna.provider.MediaFormat;
 
 import java.io.File;
 import java.util.ArrayList;

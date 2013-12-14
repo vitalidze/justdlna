@@ -1,18 +1,17 @@
-package su.litvak.justdlna.provider;
+package su.litvak.justdlna.model;
 
 import org.teleal.cling.support.model.Res;
-import org.teleal.cling.support.model.item.ImageItem;
+import org.teleal.cling.support.model.item.AudioItem;
 import org.teleal.cling.support.model.item.Item;
 
-public enum ImageFormat implements MediaFormat {
-    JPG("jpg", "image/jpeg"),
-    JPEG("jpeg", "image/jpeg"),
-    PNG("png", "image/png");
+public enum AudioFormat implements MediaFormat {
+    MP3("mp3", "audio/mpeg"),
+    OGG("ogg", "audio/ogg");
 
     private final String ext;
     private final String mime;
 
-    private ImageFormat(final String ext, final String mime) {
+    private AudioFormat(final String ext, final String mime) {
         this.ext = ext;
         this.mime = mime;
     }
@@ -29,6 +28,6 @@ public enum ImageFormat implements MediaFormat {
 
     @Override
     public Item createItem(String id, String title, Res res) {
-        return new ImageItem(id, "", title, "", res);
+        return new AudioItem(id, "", title, "", res);
     }
 }
