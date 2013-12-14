@@ -11,6 +11,7 @@ import org.teleal.cling.model.types.UDADeviceType;
 import org.teleal.cling.model.types.UDN;
 import org.teleal.cling.support.connectionmanager.ConnectionManagerService;
 import su.litvak.justdlna.Config;
+import su.litvak.justdlna.model.RootNode;
 
 /**
  * Based on a class from WireMe and used under Apache 2 License.
@@ -24,7 +25,7 @@ public class MediaServer {
 
 	private final LocalDevice localDevice;
 
-	public MediaServer(final String hostName) throws ValidationException {
+	public MediaServer(final String hostName, final RootNode rootNode) throws ValidationException {
 		final DeviceType type = new UDADeviceType(DEVICE_TYPE, VERSION);
 		final DeviceDetails details = new DeviceDetails(Config.METADATA_MODEL_NAME + " (" + hostName + ")",
 				new ManufacturerDetails(Config.METADATA_MANUFACTURER),
@@ -34,14 +35,14 @@ public class MediaServer {
 		contDirSrv.setManager(new DefaultServiceManager<ContentDirectoryService>(contDirSrv, ContentDirectoryService.class) {
 			@Override
 			protected ContentDirectoryService createServiceInstance () {
-				return new ContentDirectoryService();
+				return new ContentDirectoryService(rootNode);
 			}
 		});
 
 		final LocalService<ConnectionManagerService> connManSrv = new AnnotationLocalServiceBinder().read(ConnectionManagerService.class);
 		connManSrv.setManager(new DefaultServiceManager<ConnectionManagerService>(connManSrv, ConnectionManagerService.class));
 
-		final UDN usi = UDN.uniqueSystemIdentifier("miniDLNA-MediaServer");
+		final UDN usi = UDN.uniqueSystemIdentifier("justDLNA-MediaServer");
 		LOG.info("uniqueSystemIdentifier: {}", usi);
 		this.localDevice = new LocalDevice(new DeviceIdentity(usi), type, details, new LocalService[] { contDirSrv, connManSrv });
 	}

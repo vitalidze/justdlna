@@ -3,7 +3,6 @@ package su.litvak.justdlna.model;
 import org.teleal.cling.support.model.DIDLObject;
 import org.teleal.cling.support.model.container.Container;
 import org.teleal.cling.support.model.item.Item;
-import su.litvak.justdlna.provider.ContentProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +22,15 @@ public abstract class ContainerNode extends ContentNode {
     }
 
     abstract Container createContainer();
-    public abstract List<ContainerNode> getContainers();
+    public abstract List<? extends ContainerNode> getContainers();
     public abstract List<ItemNode> getItems();
-
-    public abstract ContentProvider getContentProvider();
 
     public final int getChildCount() {
         return getContainers().size() + getItems().size();
     }
 
     public List<Container> getContainers(int from, int to) {
-        List<ContainerNode> containers = getContainers().subList(from, to);
+        List<? extends ContainerNode> containers = getContainers().subList(from, to);
         List<Container> result = new ArrayList<Container>(containers.size());
         for (ContainerNode containerNode : containers) {
             result.add(containerNode.getContainer());

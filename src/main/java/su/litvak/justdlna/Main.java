@@ -22,13 +22,13 @@ public class Main {
         bridgeJul();
 
         LOG.info("Initializing root node...");
-        RootNode.get();
+        RootNode rootNode = new RootNode(Config.get().getFolders());
 
         final String hostName = InetAddress.getLocalHost().getHostName();
 
         LOG.info("hostName: {}", hostName);
         final UpnpService upnpService = new UpnpServiceImpl();
-        upnpService.getRegistry().addDevice(new MediaServer(hostName).getDevice());
+        upnpService.getRegistry().addDevice(new MediaServer(hostName, rootNode).getDevice());
     }
 
     public static void bridgeJul() {
