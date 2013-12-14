@@ -4,8 +4,8 @@ import org.teleal.cling.support.model.item.Item;
 
 public class ItemNode extends ContentNode {
 
-    ItemNode(ContainerNode parent, String id) {
-        super(parent, id);
+    ItemNode(String id) {
+        super(id);
     }
 
     public Item getItem() {

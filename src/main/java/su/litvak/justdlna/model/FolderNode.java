@@ -26,14 +26,14 @@ public class FolderNode extends ContainerNode {
                       File folder,
                       @JsonProperty("format")
                       Class<? extends MediaFormat> format) {
-        super(null, contentId(format, folder));
+        super(contentId(format, folder));
         this.folder = folder;
         this.title = title;
         this.format = format;
     }
 
-    public FolderNode(ContainerNode parent, File folder, Class<? extends MediaFormat> format) {
-        super(parent, contentId(format, folder));
+    public FolderNode(File folder, Class<? extends MediaFormat> format) {
+        super(contentId(format, folder));
         this.folder = folder;
         this.title = folder.getName();
         this.format = format;
@@ -48,7 +48,7 @@ public class FolderNode extends ContainerNode {
         container.setRestricted(true);
         container.setWriteStatus(WriteStatus.NOT_WRITABLE);
         container.setChildCount(Integer.valueOf(0));
-        return parent.addChild(container);
+        return container;
     }
 
     @Override
@@ -56,9 +56,10 @@ public class FolderNode extends ContainerNode {
         List<ContainerNode> result = new ArrayList<ContainerNode>();
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
-                FolderNode subFolder = new FolderNode(this, file, format);
+                FolderNode subFolder = new FolderNode(file, format);
                 if (!subFolder.getItems().isEmpty()) {
                     result.add(subFolder);
+                    subFolder.setParent(this);
                 }
             }
         }

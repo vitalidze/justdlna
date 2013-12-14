@@ -58,6 +58,7 @@ public class ContentDirectoryService extends AbstractContentDirectoryService {
                 final int to = Math.min(containerNode.getItems().size(), from + (int) (maxResults - didl.getContainers().size()));
                 didl.setItems(containerNode.getItems(from, to));
             }
+
             return new BrowseResult(new DIDLParser().generate(didl),
                     didl.getContainers().size() + didl.getItems().size(),
                     containerNode.getChildCount());

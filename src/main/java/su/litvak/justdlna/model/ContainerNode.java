@@ -10,8 +10,8 @@ import java.util.List;
 public abstract class ContainerNode extends ContentNode {
     private Container container;
 
-    public ContainerNode(ContainerNode parent, String id) {
-        super(parent, id);
+    public ContainerNode(String id) {
+        super(id);
     }
 
     public final Container getContainer() {
@@ -47,18 +47,10 @@ public abstract class ContainerNode extends ContentNode {
         return result;
     }
 
-    final <T extends DIDLObject> T addChild(T node) {
-        if (node instanceof Item) {
-            getContainer().addItem((Item) node);
-        } else if (node instanceof Container) {
-            getContainer().addContainer((Container) node);
-        } else {
-            throw new IllegalArgumentException("Unknown child type " + node.getClass());
-        }
-
-        node.setParentID(id);
-        getContainer().setChildCount(Integer.valueOf(getContainer().getChildCount().intValue() + 1));
-
-        return node;
+    @Override
+    public void setParent(ContainerNode parent) {
+        super.setParent(parent);
+        parent.getContainer().addContainer(getContainer());
+        getContainer().setParentID(parent.getId());
     }
 }

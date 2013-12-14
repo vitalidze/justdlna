@@ -12,8 +12,11 @@ public class RootNode extends ContainerNode {
     private List<? extends ContainerNode> topLevelContainers;
 
     public RootNode(List<? extends ContainerNode> topLevelContainers) {
-        super(null, "0");
+        super("0");
         this.topLevelContainers = topLevelContainers;
+        for (ContainerNode containerNode : topLevelContainers) {
+            containerNode.setParent(this);
+        }
     }
 
     @Override
