@@ -5,7 +5,6 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.litvak.justdlna.model.FolderNode;
-import su.litvak.justdlna.provider.FolderContentProvider;
 
 import java.io.File;
 import java.util.List;
