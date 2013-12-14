@@ -1,10 +1,10 @@
-package su.litvak.minidlna;
+package su.litvak.justdlna;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.litvak.minidlna.provider.FolderContentProvider;
+import su.litvak.justdlna.provider.FolderContentProvider;
 
 import java.io.File;
 import java.util.List;

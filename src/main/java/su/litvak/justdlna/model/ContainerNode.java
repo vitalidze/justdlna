@@ -1,9 +1,9 @@
-package su.litvak.minidlna.model;
+package su.litvak.justdlna.model;
 
 import org.teleal.cling.support.model.DIDLObject;
 import org.teleal.cling.support.model.container.Container;
 import org.teleal.cling.support.model.item.Item;
-import su.litvak.minidlna.provider.ContentProvider;
+import su.litvak.justdlna.provider.ContentProvider;
 
 public abstract class ContainerNode extends ContentNode {
     private Container container;

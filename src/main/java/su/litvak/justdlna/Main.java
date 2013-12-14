@@ -1,12 +1,12 @@
-package su.litvak.minidlna;
+package su.litvak.justdlna;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.teleal.cling.UpnpService;
 import org.teleal.cling.UpnpServiceImpl;
-import su.litvak.minidlna.dlna.MediaServer;
-import su.litvak.minidlna.model.RootNode;
+import su.litvak.justdlna.dlna.MediaServer;
+import su.litvak.justdlna.model.RootNode;
 
 import java.net.InetAddress;
 import java.util.logging.LogManager;

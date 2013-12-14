@@ -1,4 +1,4 @@
-package su.litvak.minidlna.provider;
+package su.litvak.justdlna.provider;
 
 public enum VideoFormat implements MediaFormat {
 

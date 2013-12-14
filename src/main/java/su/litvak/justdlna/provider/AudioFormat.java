@@ -1,4 +1,4 @@
-package su.litvak.minidlna.provider;
+package su.litvak.justdlna.provider;
 
 public enum AudioFormat implements MediaFormat {
     MP3("mp3", "audio/mpeg"),

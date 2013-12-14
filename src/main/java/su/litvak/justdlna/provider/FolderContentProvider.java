@@ -1,16 +1,16 @@
-package su.litvak.minidlna.provider;
+package su.litvak.justdlna.provider;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
-import su.litvak.minidlna.model.ContentNode;
-import su.litvak.minidlna.model.FolderNode;
-import su.litvak.minidlna.model.RootNode;
+import su.litvak.justdlna.model.ContentNode;
+import su.litvak.justdlna.model.FolderNode;
+import su.litvak.justdlna.model.RootNode;
 
 import java.io.File;
 import java.util.List;
 
-import static su.litvak.minidlna.util.HashHelper.sha1;
+import static su.litvak.justdlna.util.HashHelper.sha1;
 
 /**
  * TODO

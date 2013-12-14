@@ -1,4 +1,4 @@
-package su.litvak.minidlna.util;
+package su.litvak.justdlna.util;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;

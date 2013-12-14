@@ -1,4 +1,4 @@
-package su.litvak.minidlna.dlna;
+package su.litvak.justdlna.dlna;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,10 +11,10 @@ import org.teleal.cling.support.model.BrowseResult;
 import org.teleal.cling.support.model.DIDLContent;
 import org.teleal.cling.support.model.SortCriterion;
 import org.teleal.cling.support.model.container.Container;
-import su.litvak.minidlna.model.ContainerNode;
-import su.litvak.minidlna.model.ContentNode;
-import su.litvak.minidlna.model.ItemNode;
-import su.litvak.minidlna.model.NodeMap;
+import su.litvak.justdlna.model.ContainerNode;
+import su.litvak.justdlna.model.ContentNode;
+import su.litvak.justdlna.model.ItemNode;
+import su.litvak.justdlna.model.NodeMap;
 
 public class ContentDirectoryService extends AbstractContentDirectoryService {
     private static final Logger LOG = LoggerFactory.getLogger(ContentDirectoryService.class);

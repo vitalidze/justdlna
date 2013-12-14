@@ -1,10 +1,10 @@
-package su.litvak.minidlna.model;
+package su.litvak.justdlna.model;
 
 import org.teleal.cling.support.model.WriteStatus;
 import org.teleal.cling.support.model.container.Container;
-import su.litvak.minidlna.Config;
-import su.litvak.minidlna.provider.ContentProvider;
-import su.litvak.minidlna.provider.FolderContentProvider;
+import su.litvak.justdlna.Config;
+import su.litvak.justdlna.provider.ContentProvider;
+import su.litvak.justdlna.provider.FolderContentProvider;
 
 import java.util.ArrayList;
 import java.util.List;

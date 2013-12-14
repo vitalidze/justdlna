@@ -1,4 +1,4 @@
-package su.litvak.minidlna.model;
+package su.litvak.justdlna.model;
 
 public abstract class ContentNode {
     final String id;

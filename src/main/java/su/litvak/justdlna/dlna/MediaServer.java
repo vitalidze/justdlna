@@ -1,4 +1,4 @@
-package su.litvak.minidlna.dlna;
+package su.litvak.justdlna.dlna;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,7 @@ import org.teleal.cling.model.types.DeviceType;
 import org.teleal.cling.model.types.UDADeviceType;
 import org.teleal.cling.model.types.UDN;
 import org.teleal.cling.support.connectionmanager.ConnectionManagerService;
-import su.litvak.minidlna.Config;
+import su.litvak.justdlna.Config;
 
 /**
  * Based on a class from WireMe and used under Apache 2 License.

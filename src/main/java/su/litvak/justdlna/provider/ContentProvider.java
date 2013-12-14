@@ -1,6 +1,6 @@
-package su.litvak.minidlna.provider;
+package su.litvak.justdlna.provider;
 
-import su.litvak.minidlna.model.ContentNode;
+import su.litvak.justdlna.model.ContentNode;
 
 import java.util.List;
 

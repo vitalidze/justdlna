@@ -1,4 +1,4 @@
-package su.litvak.minidlna.provider;
+package su.litvak.justdlna.provider;
 
 public enum ImageFormat implements MediaFormat {
     JPG("jpg", "image/jpeg"),
