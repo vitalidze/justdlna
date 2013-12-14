@@ -10,17 +10,21 @@ import org.teleal.cling.support.model.BrowseFlag;
 import org.teleal.cling.support.model.BrowseResult;
 import org.teleal.cling.support.model.DIDLContent;
 import org.teleal.cling.support.model.SortCriterion;
-import org.teleal.cling.support.model.container.Container;
 import su.litvak.justdlna.model.ContainerNode;
 import su.litvak.justdlna.model.ContentNode;
 import su.litvak.justdlna.model.ItemNode;
-import su.litvak.justdlna.model.NodeMap;
+import su.litvak.justdlna.model.RootNode;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ContentDirectoryService extends AbstractContentDirectoryService {
     private static final Logger LOG = LoggerFactory.getLogger(ContentDirectoryService.class);
+    Map<String, ContentNode> nodes = new HashMap<String, ContentNode>();
 
-    public ContentDirectoryService () {
+    public ContentDirectoryService (RootNode rootNode) {
         super();
+        nodes.put(rootNode.getId(), rootNode);
     }
 
     @Override
@@ -28,7 +32,7 @@ public class ContentDirectoryService extends AbstractContentDirectoryService {
         LOG.info("browse: {} ({}, {})", objectID, firstResult, maxResults);
         try {
             final DIDLContent didl = new DIDLContent();
-            final ContentNode contentNode = NodeMap.get().get(objectID);
+            final ContentNode contentNode = nodes.get(objectID);
 
             if (contentNode == null) return new BrowseResult("", 0, 0);
 
@@ -38,27 +42,25 @@ public class ContentDirectoryService extends AbstractContentDirectoryService {
             }
 
             final ContainerNode containerNode = (ContainerNode) contentNode;
-            containerNode.getContentProvider().getChildren(containerNode);
-            final Container contentContainer = containerNode.getContainer();
 
             if (browseFlag == BrowseFlag.METADATA) {
-                didl.addContainer(contentContainer);
+                didl.addContainer(containerNode.getContainer());
                 return new BrowseResult(new DIDLParser().generate(didl), 1, 1);
             }
 
-            if (contentContainer.getContainers().size() > firstResult) {
+            if (containerNode.getContainers().size() > firstResult) {
                 final int from = (int) firstResult;
-                final int to = Math.min((int) (firstResult + maxResults), contentContainer.getContainers().size());
-                didl.setContainers(contentContainer.getContainers().subList(from, to));
+                final int to = Math.min((int) (firstResult + maxResults), containerNode.getContainers().size());
+                didl.setContainers(containerNode.getContainers(from, to));
             }
             if (didl.getContainers().size() < maxResults) {
-                final int from = (int) Math.max(firstResult - contentContainer.getContainers().size(), 0);
-                final int to = Math.min(contentContainer.getItems().size(), from + (int) (maxResults - didl.getContainers().size()));
-                didl.setItems(contentContainer.getItems().subList(from, to));
+                final int from = (int) Math.max(firstResult - containerNode.getContainers().size(), 0);
+                final int to = Math.min(containerNode.getItems().size(), from + (int) (maxResults - didl.getContainers().size()));
+                didl.setItems(containerNode.getItems(from, to));
             }
             return new BrowseResult(new DIDLParser().generate(didl),
                     didl.getContainers().size() + didl.getItems().size(),
-                    contentContainer.getChildCount().intValue());
+                    containerNode.getChildCount());
         }
         catch (final Exception e) {
             LOG.warn("Failed to generate directory listing.", e);

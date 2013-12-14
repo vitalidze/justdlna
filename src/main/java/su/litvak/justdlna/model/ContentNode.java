@@ -8,4 +8,8 @@ public abstract class ContentNode {
         this.parent = parent;
         this.id = id;
     }
+
+    public String getId() {
+        return id;
+    }
 }
