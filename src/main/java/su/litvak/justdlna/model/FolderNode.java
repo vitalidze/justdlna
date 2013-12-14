@@ -9,7 +9,6 @@ import su.litvak.justdlna.provider.MediaFormat;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static su.litvak.justdlna.util.HashHelper.sha1;
@@ -17,7 +16,7 @@ import static su.litvak.justdlna.util.HashHelper.sha1;
 public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
     final File folder;
     final String title;
-    final Class<T> format;
+    final Class<T> formatClass;
 
     @JsonCreator
     public FolderNode(@JsonProperty("title")
@@ -25,18 +24,18 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
                       @JsonProperty("path")
                       File folder,
                       @JsonProperty("format")
-                      Class<T> format) {
-        super(contentId(format, folder));
+                      Class<T> formatClass) {
+        super(contentId(formatClass, folder));
         this.folder = folder;
         this.title = title;
-        this.format = format;
+        this.formatClass = formatClass;
     }
 
-    public FolderNode(File folder, Class<T> format) {
-        super(contentId(format, folder));
+    public FolderNode(File folder, Class<T> formatClass) {
+        super(contentId(formatClass, folder));
         this.folder = folder;
         this.title = folder.getName();
-        this.format = format;
+        this.formatClass = formatClass;
     }
 
     @Override
@@ -56,7 +55,7 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
         List<ContainerNode> result = new ArrayList<ContainerNode>();
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
-                FolderNode subFolder = new FolderNode(file, format);
+                FolderNode subFolder = new FolderNode(file, formatClass);
                 if (!subFolder.getItems().isEmpty()) {
                     result.add(subFolder);
                     subFolder.setParent(this);
@@ -71,11 +70,11 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
         List<ItemNode> result = new ArrayList<ItemNode>();
         for (File file : folder.listFiles()) {
             if (file.isFile()) {
-                MediaFormat format = getFormat(file.getName().substring(file.getName().lastIndexOf('.') + 1).toUpperCase(), this.format);
+                MediaFormat format = getFormat(file.getName().substring(file.getName().lastIndexOf('.') + 1).toUpperCase(), this.formatClass);
                 if (format == null) {
                     continue;
                 }
-                ItemNode itemNode = new ItemNode(contentId(this.format, file), file, format);
+                ItemNode itemNode = new ItemNode(contentId(this.formatClass, file), file, format);
                 result.add(itemNode);
                 itemNode.setParent(this);
             }
@@ -83,12 +82,8 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
         return result;
     }
 
-    public File getFolder() {
-        return folder;
-    }
-
-    private static String contentId(Class<? extends MediaFormat> format, File folder) {
-        return format.getName() + (sha1(folder.getAbsolutePath()) + "-" + getSafeName(folder));
+    private static String contentId(Class<? extends MediaFormat> formatClass, File folder) {
+        return formatClass.getName() + (sha1(folder.getAbsolutePath()) + "-" + getSafeName(folder));
     }
 
     private static String getSafeName (final File folder) {

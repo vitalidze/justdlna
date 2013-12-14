@@ -10,12 +10,15 @@ import org.teleal.cling.support.model.BrowseFlag;
 import org.teleal.cling.support.model.BrowseResult;
 import org.teleal.cling.support.model.DIDLContent;
 import org.teleal.cling.support.model.SortCriterion;
+import org.teleal.cling.support.model.container.Container;
+import org.teleal.cling.support.model.item.Item;
 import su.litvak.justdlna.model.ContainerNode;
 import su.litvak.justdlna.model.ContentNode;
 import su.litvak.justdlna.model.ItemNode;
 import su.litvak.justdlna.model.RootNode;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ContentDirectoryService extends AbstractContentDirectoryService {
@@ -32,42 +35,50 @@ public class ContentDirectoryService extends AbstractContentDirectoryService {
         LOG.info("browse: {} ({}, {})", objectID, firstResult, maxResults);
         try {
             final DIDLContent didl = new DIDLContent();
-            final ContentNode contentNode = nodes.get(objectID);
+            final ContentNode node = nodes.get(objectID);
 
-            if (contentNode == null) return new BrowseResult("", 0, 0);
+            if (node == null) return new BrowseResult("", 0, 0);
 
-            if (contentNode instanceof ItemNode) {
-                didl.addItem(((ItemNode) contentNode).getItem());
+            if (node instanceof ItemNode) {
+                didl.addItem(((ItemNode) node).getItem());
                 return new BrowseResult(new DIDLParser().generate(didl), 1, 1);
             }
 
-            final ContainerNode containerNode = (ContainerNode) contentNode;
+            final ContainerNode containerNode = (ContainerNode) node;
+            final Container container = containerNode.getContainer();
 
             if (browseFlag == BrowseFlag.METADATA) {
-                didl.addContainer(containerNode.getContainer());
+                didl.addContainer(container);
                 return new BrowseResult(new DIDLParser().generate(didl), 1, 1);
             }
 
-            if (containerNode.getContainers().size() > firstResult) {
+            List<? extends ContainerNode> containerNodes = containerNode.getContainers();
+            List<? extends ItemNode> itemNodes = containerNode.getItems();
+
+            if (containerNodes.size() > firstResult) {
                 final int from = (int) firstResult;
-                final int to = Math.min((int) (firstResult + maxResults), containerNode.getContainers().size());
-                for (ContainerNode node : containerNode.getContainers().subList(from, to)) {
+                final int to = Math.min((int) (firstResult + maxResults), containerNodes.size());
+                for (ContainerNode containerNodeX : containerNodes.subList(from, to)) {
                     nodes.put(node.getId(), node);
-                    didl.addContainer(node.getContainer());
+                    Container containerX = containerNodeX.getContainer();
+                    container.addContainer(containerX);
+                    didl.addContainer(containerX);
                 }
             }
             if (didl.getContainers().size() < maxResults) {
-                final int from = (int) Math.max(firstResult - containerNode.getContainers().size(), 0);
-                final int to = Math.min(containerNode.getItems().size(), from + (int) (maxResults - didl.getContainers().size()));
-                for (ItemNode item : containerNode.getItems().subList(from, to)) {
-                    nodes.put(item.getId(), item);
-                    didl.addItem(item.getItem());
+                final int from = (int) Math.max(firstResult - container.getContainers().size(), 0);
+                final int to = Math.min(itemNodes.size(), from + (int) (maxResults - didl.getContainers().size()));
+                for (ItemNode itemNode : itemNodes.subList(from, to)) {
+                    nodes.put(itemNode.getId(), itemNode);
+                    Item item = itemNode.getItem();
+                    container.addItem(item);
+                    didl.addItem(item);
                 }
             }
 
             return new BrowseResult(new DIDLParser().generate(didl),
                     didl.getContainers().size() + didl.getItems().size(),
-                    containerNode.getChildCount());
+                    container.getChildCount());
         }
         catch (final Exception e) {
             LOG.warn("Failed to generate directory listing.", e);

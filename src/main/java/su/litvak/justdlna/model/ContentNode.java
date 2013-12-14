@@ -12,7 +12,11 @@ public abstract class ContentNode {
         return id;
     }
 
-    public void setParent(ContainerNode parent) {
+    public final void setParent(ContainerNode parent) {
         this.parent = parent;
+    }
+
+    public ContainerNode getParent() {
+        return parent;
     }
 }
