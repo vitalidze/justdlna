@@ -40,7 +40,7 @@ public final class ContentServlet extends DefaultServlet {
 	public Resource getResource (final String pathInContext) {
 		try {
 			final ItemNode node = (ItemNode) NodesMap.get(URLDecoder.decode(pathInContext.replaceFirst("/", ""), "UTF-8"));
-            return Resource.newResource(node.getFile());
+            return node == null ? null : Resource.newResource(node.getFile());
 		}
 		catch (final IOException e) {
 			LOG.warn("Failed to serve resource '{}': {}", pathInContext, e.getMessage());
