@@ -1,6 +1,6 @@
 package su.litvak.justdlna.servlet;
 
-import org.eclipse.jetty.http.HttpHeader;
+import org.eclipse.jetty.http.HttpHeaders;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.util.resource.Resource;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ public final class ContentServlet extends DefaultServlet {
 			super.doGet(req, resp);
 		}
 		finally {
-			String ranges = join(req.getHeaders(HttpHeader.RANGE.asString()), ",");
+			String ranges = join(req.getHeaders(HttpHeaders.RANGE), ",");
 			if (ranges != null) {
 				LOG.info("request: {} {} (r:{})", resp.getStatus(), req.getRequestURI(), ranges);
 			}
