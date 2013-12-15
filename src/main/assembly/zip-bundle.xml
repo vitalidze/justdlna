@@ -12,6 +12,16 @@
         <fileSet>
             <directory>${project.build.directory}/generated-resources/appassembler/jsw/${project.artifactId}</directory>
             <outputDirectory>/</outputDirectory>
+            <!-- exclude binary directory because it is then included with different file mode -->
+            <excludes>
+                <exclude>bin/*</exclude>
+            </excludes>
+        </fileSet>
+        <!-- files under bin directory must be executable -->
+        <fileSet>
+            <directory>${project.build.directory}/generated-resources/appassembler/jsw/${project.artifactId}/bin</directory>
+            <outputDirectory>/bin/</outputDirectory>
+            <fileMode>0755</fileMode>
         </fileSet>
         <!-- empty directory for logs -->
         <fileSet>
