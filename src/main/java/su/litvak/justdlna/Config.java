@@ -4,12 +4,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.litvak.justdlna.model.FolderNode;
+import su.litvak.justdlna.model.ContainerNode;
 
 import java.io.File;
-import java.net.*;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -22,7 +20,7 @@ public class Config {
     public static String METADATA_MODEL_DESCRIPTION = "justDLNA MediaServer";
     public static String METADATA_MODEL_NUMBER = "v1";
 
-    private final static String CONFIG_FILE = System.getProperty("user.dir") + File.separatorChar + "config.json";
+    private final static String CONFIG_FILE = System.getProperty("user.dir") + File.separatorChar + "etc" + File.separatorChar + "config.json";
     private Logger logger = LoggerFactory.getLogger(Config.class);
 
     private final static Config INSTANCE = new Config();
@@ -38,7 +36,7 @@ public class Config {
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
     private int refreshInterval = 10 * 60 * 1000;
 
-    private List<FolderNode> folders;
+    private List<ContainerNode> folders = new ArrayList<ContainerNode>();
 
     private String ipAddress;
 
@@ -77,11 +75,11 @@ public class Config {
         this.refreshInterval = refreshInterval;
     }
 
-    public List<FolderNode> getFolders() {
+    public List<ContainerNode> getFolders() {
         return folders;
     }
 
-    public void setFolders(List<FolderNode> folders) {
+    public void setFolders(List<ContainerNode> folders) {
         this.folders = folders;
     }
 
