@@ -58,4 +58,54 @@
             <version>${jackson.version}</version>
         </dependency>
     </dependencies>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>codehaus</id>
+            <name>codehaus</name>
+            <url>https://nexus.codehaus.org/content/groups/public</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>1.7-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>generate-jsw-scripts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>generate-daemons</goal>
+                        </goals>
+                        <configuration>
+                            <repositoryLayout>flat</repositoryLayout>
+                            <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+                            <daemons>
+                                <daemon>
+                                    <id>${artifactId}</id>
+                                    <!-- the next line is added by default if you don't have wrapperMainClass's setting -->
+                                    <wrapperMainClass>org.tanukisoftware.wrapper.WrapperSimpleApp</wrapperMainClass>
+                                    <mainClass>su.litvak.justdlna.Main</mainClass>
+                                    <platforms>
+                                        <platform>jsw</platform>
+                                    </platforms>
+                                </daemon>
+                            </daemons>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <descriptor>src/main/assembly/zip-bundle.xml</descriptor>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
