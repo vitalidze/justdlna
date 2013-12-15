@@ -10,7 +10,7 @@
     <fileSets>
         <!-- output of appassembler -->
         <fileSet>
-            <directory>${project.build.directory}/generated-resources/appassembler/jsw/${artifactId}</directory>
+            <directory>${project.build.directory}/generated-resources/appassembler/jsw/${project.artifactId}</directory>
             <outputDirectory>/</outputDirectory>
         </fileSet>
         <!-- empty directory for logs -->

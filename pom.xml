@@ -85,7 +85,7 @@
                             <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
                             <daemons>
                                 <daemon>
-                                    <id>${artifactId}</id>
+                                    <id>${project.artifactId}</id>
                                     <!-- the next line is added by default if you don't have wrapperMainClass's setting -->
                                     <wrapperMainClass>org.tanukisoftware.wrapper.WrapperSimpleApp</wrapperMainClass>
                                     <mainClass>su.litvak.justdlna.Main</mainClass>
