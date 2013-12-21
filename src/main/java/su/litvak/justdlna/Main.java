@@ -40,6 +40,11 @@ public class Main {
         }
 
         /**
+         * Will bind to a single IP address
+         */
+        System.setProperty("org.teleal.cling.network.useAddresses", Config.get().getIpAddress());
+
+        /**
          * Initialize root node
          */
         LOG.info("Initializing root node...");
