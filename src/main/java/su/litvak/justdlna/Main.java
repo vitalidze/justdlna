@@ -65,6 +65,29 @@ public class Main {
          */
         final Server server = makeContentServer();
         server.start();
+
+        /**
+         * Register shutdown hook
+         */
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                LOG.info("Shutting down " + Config.APPNAME);
+
+                LOG.info("Shutting down Cling UPNP service");
+                upnpService.shutdown();
+                LOG.info("Shutting down jetty");
+                try {
+                    server.stop();
+                } catch (Exception ex) {
+                    LOG.error("Error occurred during jetty shutdown", ex);
+                }
+            }
+        });
+
+        /**
+         * Leave application running
+         */
         server.join();
     }
 
