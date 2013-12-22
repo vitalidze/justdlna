@@ -48,7 +48,7 @@ public class LastAddedNode<T extends Enum<T> & MediaFormat> extends ContainerNod
         Collections.sort(sortedItems, new Comparator<ItemNode>() {
             @Override
             public int compare(ItemNode o1, ItemNode o2) {
-                return (int) (o2.file.lastModified() - o1.file.lastModified());
+                return Long.valueOf(o2.file.lastModified()).compareTo(Long.valueOf(o1.file.lastModified()));
             }
         });
         return sortedItems.subList(0, Math.min(limit, sortedItems.size()));
