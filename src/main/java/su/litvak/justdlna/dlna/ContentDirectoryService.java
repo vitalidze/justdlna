@@ -62,8 +62,8 @@ public class ContentDirectoryService extends AbstractContentDirectoryService {
                 }
             }
             if (didl.getContainers().size() < maxResults) {
-                final int from = (int) Math.max(firstResult - container.getContainers().size(), 0);
-                final int to = Math.min(itemNodes.size(), from + (int) (maxResults - didl.getContainers().size()));
+                final int from = (int) Math.max(firstResult - containerNodes.size(), 0);
+                final int to = Math.min(itemNodes.size(), from + (int) (maxResults - containerNodes.size()));
                 for (ItemNode itemNode : itemNodes.subList(from, to)) {
                     NodesMap.put(itemNode.getId(), itemNode);
                     Item item = itemNode.getItem();

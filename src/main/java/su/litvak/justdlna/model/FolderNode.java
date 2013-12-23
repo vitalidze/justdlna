@@ -81,6 +81,14 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
         return result;
     }
 
+    public File getFolder() {
+        return folder;
+    }
+
+    public Class<T> getFormatClass() {
+        return formatClass;
+    }
+
     private static String contentId(Class<? extends MediaFormat> formatClass, File folder) {
         return formatClass.getName() + (sha1(folder.getAbsolutePath()) + "-" + getSafeName(folder));
     }

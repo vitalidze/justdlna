@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static su.litvak.justdlna.util.FileHelper.*;
 
 public class LastAddedNodeTest {
     @Rule public TemporaryFolder tmp = new TemporaryFolder();
@@ -68,12 +69,5 @@ public class LastAddedNodeTest {
         File f = new File(parent, name);
         touch(f);
         return f;
-    }
-
-    private static void touch(File file) throws IOException {
-        if (!file.exists()) {
-            file.createNewFile();
-        }
-        file.setLastModified(System.currentTimeMillis());
     }
 }
