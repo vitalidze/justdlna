@@ -11,7 +11,16 @@ TODO
 TODO
 
 ## Building
-TODO
+
+Checkout project source from github:
+
+    git clone https://github.com/vitalidze/justdlna.git
+
+Project uses [maven assembly plugin](http://maven.apache.org/plugins/maven-assembly-plugin/) to build all distributions. Just run the command below to build .zip, .tar.gz and .tar.bz2 distributions.
+
+    mvn clean assembly:assembly
+
+Archives with distributions will appear under the `target/` folder.
 
 ## Installation
 
