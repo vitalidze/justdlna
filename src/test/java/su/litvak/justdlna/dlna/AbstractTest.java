@@ -3,6 +3,7 @@ package su.litvak.justdlna.dlna;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import su.litvak.justdlna.model.FolderNode;
+import su.litvak.justdlna.model.Formats;
 import su.litvak.justdlna.model.MediaFormat;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public abstract class AbstractTest {
     <T extends Enum<T> & MediaFormat> FolderNode<T> mockDir(final String name, Class<T> formatClass, File parent) {
         File d = new File(parent, name);
         d.mkdirs();
-        return new FolderNode<T>(d.getName(), d, formatClass);
+        return new FolderNode<T>(d.getName(), d, Formats.toString(formatClass));
     }
 
     static File mockFile(final String name, MediaFormat format, final FolderNode<?> parent) throws IOException {

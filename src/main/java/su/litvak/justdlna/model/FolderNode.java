@@ -19,14 +19,14 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
                       @JsonProperty("path")
                       File folder,
                       @JsonProperty("format")
-                      Class<T> formatClass) {
-        super(contentId(formatClass, folder), title == null || title.trim().isEmpty() ? folder.getName() : title);
+                      String format) {
+        super(contentId(format, folder), title == null || title.trim().isEmpty() ? folder.getName() : title);
         this.folder = folder;
-        this.formatClass = formatClass;
+        this.formatClass = Formats.fromString(format);
     }
 
     public FolderNode(File folder, Class<T> formatClass) {
-        super(contentId(formatClass, folder), folder.getName());
+        super(contentId(Formats.toString(formatClass), folder), folder.getName());
         this.folder = folder;
         this.formatClass = formatClass;
     }
@@ -55,7 +55,7 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
                 if (format == null) {
                     continue;
                 }
-                ItemNode itemNode = new ItemNode(contentId(this.formatClass, file), file, format);
+                ItemNode itemNode = new ItemNode(contentId(Formats.toString(this.formatClass), file), file, format);
                 result.add(itemNode);
                 itemNode.setParent(this);
             }
@@ -71,8 +71,8 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
         return formatClass;
     }
 
-    private static String contentId(Class<? extends MediaFormat> formatClass, File folder) {
-        return formatClass.getName() + (sha1(folder.getAbsolutePath()) + "-" + getSafeName(folder));
+    private static String contentId(String format, File folder) {
+        return format + (sha1(folder.getAbsolutePath()) + "-" + getSafeName(folder));
     }
 
     private static String getSafeName (final File folder) {

@@ -35,7 +35,7 @@ public class LastAddedNodeTest extends AbstractTest {
 
     @Test
     public void testVideoSorting() throws IOException {
-        LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(null, VideoFormat.class, 5);
+        LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(null, Formats.VIDEO.name(), 5);
         Config.get().getContent().addContainer(lastVideos);
 
         assertEquals(5, lastVideos.getItems().size());
@@ -49,13 +49,13 @@ public class LastAddedNodeTest extends AbstractTest {
 
     @Test
     public void testUnderLimit() throws IOException {
-        LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(null, VideoFormat.class, files.size() + 1);
+        LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(null, Formats.VIDEO.name(), files.size() + 1);
         assertEquals(files.size(), lastVideos.getItems().size());
     }
 
     @Test
     public void testNoContainers() throws IOException {
-        LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(null, VideoFormat.class, 5);
+        LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(null, Formats.VIDEO.name(), 5);
         assertEquals(0, lastVideos.getContainers().size());
     }
 }

@@ -2,9 +2,6 @@ package su.litvak.justdlna.model;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.teleal.cling.support.model.DIDLObject;
-import org.teleal.cling.support.model.WriteStatus;
-import org.teleal.cling.support.model.container.Container;
 import su.litvak.justdlna.Config;
 
 import java.util.*;
@@ -15,11 +12,11 @@ public class LastAddedNode<T extends Enum<T> & MediaFormat> extends ContainerNod
 
     @JsonCreator
     public LastAddedNode(@JsonProperty("title") String title,
-                         @JsonProperty("format") Class<T> formatClass,
+                         @JsonProperty("format") String format,
                          @JsonProperty("limit") Integer limit) {
         super("Last-Added-" + idGenerator.getAndIncrement(),
-              title == null || title.trim().isEmpty() ? "Last added " + formatClass.getSimpleName().substring(0, formatClass.getSimpleName().indexOf("Format")) : title);
-        this.formatClass = formatClass;
+              title == null || title.trim().isEmpty() ? "Last added " + format : title);
+        this.formatClass = Formats.fromString(format);
         this.limit = limit == null ? 10 : limit.intValue();
     }
 
