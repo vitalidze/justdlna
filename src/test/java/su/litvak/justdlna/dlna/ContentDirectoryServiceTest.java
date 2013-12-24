@@ -1,27 +1,22 @@
 package su.litvak.justdlna.dlna;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.teleal.cling.support.contentdirectory.DIDLParser;
 import org.teleal.cling.support.model.BrowseFlag;
 import org.teleal.cling.support.model.BrowseResult;
 import org.teleal.cling.support.model.DIDLContent;
 import su.litvak.justdlna.Config;
-import su.litvak.justdlna.model.*;
+import su.litvak.justdlna.model.FolderNode;
+import su.litvak.justdlna.model.NodesMap;
+import su.litvak.justdlna.model.RootNode;
+import su.litvak.justdlna.model.VideoFormat;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
-import static su.litvak.justdlna.util.FileHelper.*;
+import static org.junit.Assert.assertEquals;
 
-public class ContentDirectoryServiceTest {
-    private final static String ROOT_ID = "0";
-    @Rule public TemporaryFolder tmp = new TemporaryFolder();
-
+public class ContentDirectoryServiceTest extends AbstractTest {
     private ContentDirectoryService service;
     private DIDLParser parser;
 
@@ -65,24 +60,4 @@ public class ContentDirectoryServiceTest {
         assertEquals("Test 47.avi", didl.getItems().get(0).getTitle());
         assertEquals("Test 48.avi", didl.getItems().get(1).getTitle());
 	}
-
-    private <T extends Enum<T> & MediaFormat> FolderNode<T> mockDir(final String name, Class<T> formatClass) {
-        return mockDir(name, formatClass, this.tmp.getRoot());
-    }
-
-    private <T extends Enum<T> & MediaFormat> FolderNode<T> mockDir(final String name, FolderNode<T> parent) {
-        return mockDir(name, parent.getFormatClass(), parent.getFolder());
-    }
-
-    private <T extends Enum<T> & MediaFormat> FolderNode<T> mockDir(final String name, Class<T> formatClass, File parent) {
-        File d = new File(parent, name);
-        d.mkdirs();
-        return new FolderNode<T>(d.getName(), d, formatClass);
-    }
-
-    private static File mockFile(final String name, MediaFormat format, final FolderNode<?> parent) throws IOException {
-        File f = new File(parent.getFolder(), name + '.' + format.getExt());
-        touch(f);
-        return f;
-    }
 }

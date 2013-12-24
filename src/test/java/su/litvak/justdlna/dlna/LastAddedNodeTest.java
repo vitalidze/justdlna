@@ -1,9 +1,7 @@
 package su.litvak.justdlna.dlna;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import su.litvak.justdlna.Config;
 import su.litvak.justdlna.model.*;
 
@@ -13,16 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static su.litvak.justdlna.util.FileHelper.*;
 
-public class LastAddedNodeTest {
-    @Rule public TemporaryFolder tmp = new TemporaryFolder();
+public class LastAddedNodeTest extends AbstractTest {
     List<File> files = new ArrayList<File>();
+    FolderNode<VideoFormat> folder;
 
     @Before
     public void mockFiles() throws IOException, InterruptedException {
+        folder = mockDir("Video", VideoFormat.class);
+
         for (int i = 0; i < 10; i++) {
-            File f = mockFile("video " + i + ".mkv");
+            File f = mockFile("video " + i, VideoFormat.MKV, folder);
             files.add(f);
             f.setLastModified(System.currentTimeMillis() - i * 1000);
         }
@@ -30,9 +29,8 @@ public class LastAddedNodeTest {
 
     @Before
     public void prepareConfiguration() {
-        FolderNode<VideoFormat> videos = new FolderNode<VideoFormat>("Video", tmp.getRoot(), VideoFormat.class);
         Config.get().getFolders().clear();
-        Config.get().getFolders().add(videos);
+        Config.get().getFolders().add(folder);
     }
 
     @Test
@@ -59,15 +57,5 @@ public class LastAddedNodeTest {
     public void testNoContainers() throws IOException {
         LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(VideoFormat.class, 5);
         assertEquals(0, lastVideos.getContainers().size());
-    }
-
-    private File mockFile(final String name) throws IOException {
-        return mockFile(name, this.tmp.getRoot());
-    }
-
-    private static File mockFile(final String name, final File parent) throws IOException {
-        File f = new File(parent, name);
-        touch(f);
-        return f;
     }
 }
