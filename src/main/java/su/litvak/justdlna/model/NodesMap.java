@@ -1,10 +1,10 @@
 package su.litvak.justdlna.model;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class NodesMap {
-    private final static Map<String, ContentNode> INSTANCE = new HashMap<String, ContentNode>();
+    private final static Map<String, ContentNode> INSTANCE = new ConcurrentHashMap<String, ContentNode>();
 
     private NodesMap() {
     }
