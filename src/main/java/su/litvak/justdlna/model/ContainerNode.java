@@ -1,5 +1,6 @@
 package su.litvak.justdlna.model;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.teleal.cling.support.model.DIDLObject;
@@ -50,6 +51,8 @@ public abstract class ContainerNode extends ContentNode {
     public List<ContainerNode> getContainers() {
         return containers;
     }
+
+    @JsonProperty("folders")
     public void setContainers(List<ContainerNode> containers) {
         this.containers = containers;
         for (ContainerNode container : containers) {
