@@ -55,7 +55,7 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
                 FolderNode subFolder = new FolderNode(file, formatClass);
-                if (!subFolder.getItems().isEmpty()) {
+                if (!subFolder.getItems().isEmpty() || !subFolder.getContainers().isEmpty()) {
                     result.add(subFolder);
                     subFolder.setParent(this);
                 }
