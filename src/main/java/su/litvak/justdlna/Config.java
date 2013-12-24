@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import su.litvak.justdlna.model.ContainerNode;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Config {
@@ -36,7 +34,7 @@ public class Config {
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
     private int refreshInterval = 10 * 60 * 1000;
 
-    private List<ContainerNode> folders = new ArrayList<ContainerNode>();
+    private ContainerNode content;
 
     private String ipAddress;
 
@@ -75,19 +73,19 @@ public class Config {
         this.refreshInterval = refreshInterval;
     }
 
-    public List<ContainerNode> getFolders() {
-        return folders;
-    }
-
-    public void setFolders(List<ContainerNode> folders) {
-        this.folders = folders;
-    }
-
     public String getIpAddress() {
         return ipAddress;
     }
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public ContainerNode getContent() {
+        return content;
+    }
+
+    public void setContent(ContainerNode content) {
+        this.content = content;
     }
 }

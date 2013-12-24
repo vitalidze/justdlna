@@ -22,9 +22,9 @@ public class ItemNode extends ContentNode {
         final String mime = format.getMime();
         final MimeType extMimeType = new MimeType(mime.substring(0, mime.indexOf('/')), mime.substring(mime.indexOf('/') + 1));
         String url = "http://" + Config.get().getIpAddress() + ":" + Config.get().getHttpPort();
-        final Res res = new Res(extMimeType, Long.valueOf(file.length()), url + "/" + id);
+        final Res res = new Res(extMimeType, Long.valueOf(file.length()), url + "/" + getId());
         res.setSize(file.length());
-        Item item = format.createItem(id, file.getName(), res);
+        Item item = format.createItem(getId(), file.getName(), res);
         item.setParentID(getParent().getId());
         return item;
     }

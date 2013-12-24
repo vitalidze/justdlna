@@ -2,9 +2,6 @@ package su.litvak.justdlna.model;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.teleal.cling.support.model.DIDLObject;
-import org.teleal.cling.support.model.WriteStatus;
-import org.teleal.cling.support.model.container.Container;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,7 +11,6 @@ import static su.litvak.justdlna.util.HashHelper.sha1;
 
 public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
     final File folder;
-    final String title;
     final Class<T> formatClass;
 
     @JsonCreator
@@ -24,34 +20,20 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
                       File folder,
                       @JsonProperty("format")
                       Class<T> formatClass) {
-        super(contentId(formatClass, folder));
+        super(contentId(formatClass, folder), title == null || title.trim().isEmpty() ? folder.getName() : title);
         this.folder = folder;
-        this.title = title;
         this.formatClass = formatClass;
     }
 
     public FolderNode(File folder, Class<T> formatClass) {
-        super(contentId(formatClass, folder));
+        super(contentId(formatClass, folder), folder.getName());
         this.folder = folder;
-        this.title = folder.getName();
         this.formatClass = formatClass;
     }
 
     @Override
-    Container createContainer() {
-        final Container container = new Container();
-        container.setClazz(new DIDLObject.Class("object.container"));
-        container.setId(id);
-        container.setTitle(title);
-        container.setRestricted(true);
-        container.setWriteStatus(WriteStatus.NOT_WRITABLE);
-        container.setChildCount(Integer.valueOf(0));
-        return container;
-    }
-
-    @Override
     public List<ContainerNode> getContainers() {
-        List<ContainerNode> result = new ArrayList<ContainerNode>();
+        List<ContainerNode> result = new ArrayList<ContainerNode>(super.getContainers());
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
                 FolderNode subFolder = new FolderNode(file, formatClass);

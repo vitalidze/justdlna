@@ -1,7 +1,7 @@
 package su.litvak.justdlna.model;
 
 public abstract class ContentNode {
-    final String id;
+    private String id;
     private ContainerNode parent;
 
     ContentNode(String id) {
@@ -10,6 +10,10 @@ public abstract class ContentNode {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public final void setParent(ContainerNode parent) {

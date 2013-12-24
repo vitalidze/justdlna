@@ -11,7 +11,6 @@ import org.teleal.cling.model.types.UDADeviceType;
 import org.teleal.cling.model.types.UDN;
 import org.teleal.cling.support.connectionmanager.ConnectionManagerService;
 import su.litvak.justdlna.Config;
-import su.litvak.justdlna.model.RootNode;
 
 /**
  * Based on a class from WireMe and used under Apache 2 License.

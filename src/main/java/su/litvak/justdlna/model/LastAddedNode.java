@@ -14,36 +14,24 @@ public class LastAddedNode<T extends Enum<T> & MediaFormat> extends ContainerNod
     final int limit;
 
     @JsonCreator
-    public LastAddedNode(@JsonProperty("format") Class<T> formatClass,
+    public LastAddedNode(@JsonProperty("title") String title,
+                         @JsonProperty("format") Class<T> formatClass,
                          @JsonProperty("limit") Integer limit) {
-        super("Last-Added-" + formatClass.getCanonicalName());
+        super("Last-Added-" + idGenerator.getAndIncrement(),
+              title == null || title.trim().isEmpty() ? "Last added " + formatClass.getSimpleName().substring(0, formatClass.getSimpleName().indexOf("Format")) : title);
         this.formatClass = formatClass;
         this.limit = limit == null ? 10 : limit.intValue();
     }
 
     @Override
-    Container createContainer() {
-        final Container container = new Container();
-        container.setClazz(new DIDLObject.Class("object.container"));
-        container.setId(id);
-        container.setTitle("Last added " + formatClass.getSimpleName().substring(0, formatClass.getSimpleName().indexOf("Format")));
-        container.setRestricted(true);
-        container.setWriteStatus(WriteStatus.NOT_WRITABLE);
-        container.setChildCount(Integer.valueOf(0));
-        return container;
-    }
-
-    @Override
-    public List<? extends ContainerNode> getContainers() {
+    public List<ContainerNode> getContainers() {
         return Collections.emptyList();
     }
 
     @Override
     public List<ItemNode> getItems() {
         Set<ItemNode> allItems = new HashSet<ItemNode>();
-        for (ContainerNode containerNode : Config.get().getFolders()) {
-            allItems.addAll(getAllItems(containerNode));
-        }
+        allItems.addAll(getAllItems(Config.get().getContent()));
         List<ItemNode> sortedItems = new ArrayList<ItemNode>(allItems);
         Collections.sort(sortedItems, new Comparator<ItemNode>() {
             @Override
@@ -59,9 +47,9 @@ public class LastAddedNode<T extends Enum<T> & MediaFormat> extends ContainerNod
         if (folderNode instanceof FolderNode<?> &&
             ((FolderNode<?>) folderNode).formatClass == formatClass) {
             result.addAll(folderNode.getItems());
-            for (ContainerNode containerNode : folderNode.getContainers()) {
-                result.addAll(getAllItems(containerNode));
-            }
+        }
+        for (ContainerNode containerNode : folderNode.getContainers()) {
+            result.addAll(getAllItems(containerNode));
         }
         return result;
     }

@@ -8,6 +8,7 @@ import su.litvak.justdlna.model.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -29,14 +30,13 @@ public class LastAddedNodeTest extends AbstractTest {
 
     @Before
     public void prepareConfiguration() {
-        Config.get().getFolders().clear();
-        Config.get().getFolders().add(folder);
+        Config.get().setContent(new VirtualFolderNode(Arrays.<ContainerNode>asList(folder)));
     }
 
     @Test
     public void testVideoSorting() throws IOException {
-        LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(VideoFormat.class, 5);
-        Config.get().getFolders().add(lastVideos);
+        LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(null, VideoFormat.class, 5);
+        Config.get().getContent().addContainer(lastVideos);
 
         assertEquals(5, lastVideos.getItems().size());
 
@@ -49,13 +49,13 @@ public class LastAddedNodeTest extends AbstractTest {
 
     @Test
     public void testUnderLimit() throws IOException {
-        LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(VideoFormat.class, files.size() + 1);
+        LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(null, VideoFormat.class, files.size() + 1);
         assertEquals(files.size(), lastVideos.getItems().size());
     }
 
     @Test
     public void testNoContainers() throws IOException {
-        LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(VideoFormat.class, 5);
+        LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(null, VideoFormat.class, 5);
         assertEquals(0, lastVideos.getContainers().size());
     }
 }

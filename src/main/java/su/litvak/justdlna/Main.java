@@ -11,8 +11,8 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.teleal.cling.UpnpService;
 import org.teleal.cling.UpnpServiceImpl;
 import su.litvak.justdlna.dlna.MediaServer;
+import su.litvak.justdlna.model.ContainerNode;
 import su.litvak.justdlna.model.NodesMap;
-import su.litvak.justdlna.model.RootNode;
 import su.litvak.justdlna.servlet.ContentServlet;
 
 import java.net.*;
@@ -48,7 +48,8 @@ public class Main {
          * Initialize root node
          */
         LOG.info("Initializing root node...");
-        RootNode rootNode = new RootNode(Config.get().getFolders());
+        ContainerNode rootNode = Config.get().getContent();
+        rootNode.setId("0");
         NodesMap.put(rootNode.getId(), rootNode);
 
         /**

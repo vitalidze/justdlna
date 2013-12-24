@@ -6,11 +6,7 @@ import org.teleal.cling.support.contentdirectory.DIDLParser;
 import org.teleal.cling.support.model.BrowseFlag;
 import org.teleal.cling.support.model.BrowseResult;
 import org.teleal.cling.support.model.DIDLContent;
-import su.litvak.justdlna.Config;
-import su.litvak.justdlna.model.FolderNode;
-import su.litvak.justdlna.model.NodesMap;
-import su.litvak.justdlna.model.RootNode;
-import su.litvak.justdlna.model.VideoFormat;
+import su.litvak.justdlna.model.*;
 
 import java.util.Arrays;
 
@@ -30,15 +26,10 @@ public class ContentDirectoryServiceTest extends AbstractTest {
         this.parser = new DIDLParser();
     }
 
-    @Before
-    public void cleanConfig() throws Exception {
-        Config.get().getFolders().clear();
-    }
-
 	@Test
 	public void checkBrowsePaging() throws Exception {
         FolderNode<VideoFormat> folderNode = mockDir("Video", VideoFormat.class);
-        NodesMap.put(ROOT_ID, new RootNode(Arrays.asList(folderNode)));
+        NodesMap.put(ROOT_ID, new VirtualFolderNode(Arrays.<ContainerNode>asList(folderNode)));
         mockFile("Sub file", VideoFormat.MKV, mockDir("Sub Dir 1", folderNode));
         mockFile("Sub file", VideoFormat.MPEG, mockDir("Sub Dir 2", folderNode));
         for (int i = 0; i < 49; i++) {
