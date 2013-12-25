@@ -90,4 +90,14 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends VirtualFolderNo
     public <T extends Enum<T> & MediaFormat> Class<T> getFormatClass() {
         return (Class<T>) formatClass;
     }
+
+    @Override
+    public ItemNode getItem(File f) {
+        for (ItemNode itemNode : getItems()) {
+            if (itemNode.getFile().equals(f)) {
+                return itemNode;
+            }
+        }
+        return super.getItem(f);
+    }
 }

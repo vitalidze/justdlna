@@ -1,6 +1,5 @@
 package su.litvak.justdlna.model;
 
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.teleal.cling.support.model.DIDLObject;
@@ -8,14 +7,14 @@ import org.teleal.cling.support.model.WriteStatus;
 import org.teleal.cling.support.model.container.Container;
 import su.litvak.justdlna.Config;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({@JsonSubTypes.Type (name="folder", value=FolderNode.class),
                @JsonSubTypes.Type (name="last-added", value=LastAddedNode.class),
+               @JsonSubTypes.Type (name="last-viewed", value=LastViewedNode.class),
                @JsonSubTypes.Type (name="virtual", value=VirtualFolderNode.class)})
 public abstract class ContainerNode extends ContentNode {
     static AtomicInteger idGenerator = new AtomicInteger(0);
@@ -61,5 +60,9 @@ public abstract class ContainerNode extends ContentNode {
 
     protected void setTitle(String title) {
         this.title = title;
+    }
+
+    public ItemNode getItem(File f) {
+        return null;
     }
 }

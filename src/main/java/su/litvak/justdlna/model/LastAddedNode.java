@@ -2,7 +2,6 @@ package su.litvak.justdlna.model;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
-import su.litvak.justdlna.Config;
 
 import java.util.*;
 
@@ -28,7 +27,7 @@ public class LastAddedNode<T extends Enum<T> & MediaFormat> extends ContainerNod
     @Override
     public List<ItemNode> getItems() {
         Set<ItemNode> allItems = new HashSet<ItemNode>();
-        allItems.addAll(getAllItems(Config.get().getContent()));
+        allItems.addAll(getAllItems(getParent()));
         List<ItemNode> sortedItems = new ArrayList<ItemNode>(allItems);
         Collections.sort(sortedItems, new Comparator<ItemNode>() {
             @Override

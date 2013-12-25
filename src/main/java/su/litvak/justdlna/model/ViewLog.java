@@ -59,14 +59,14 @@ public class ViewLog {
         }
     }
 
-    public static <T extends Enum<T> & MediaFormat> List<File> getLastViewItems(int limit, Class<T> formatClass) {
+    public static <T extends Enum<T> & MediaFormat> List<ItemNode> getLastViewItems(int limit, Class<T> formatClass, ContainerNode container) {
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
         try {
             conn = getConnection();
             stmt = conn.createStatement();
-            List<File> result = new ArrayList<File>(limit);
+            List<ItemNode> result = new ArrayList<ItemNode>(limit);
             int offset = 0;
             while (result.size() < limit) {
                 rs = stmt.executeQuery("SELECT DISTINCT view_date, filepath FROM " + TBL_VIEW_HISTORY + " WHERE format='" + Formats.toString(formatClass) +  "' ORDER BY view_date DESC LIMIT " + limit + " OFFSET " + offset);
@@ -74,9 +74,9 @@ public class ViewLog {
                 int resultCount = 0;
                 while (rs.next()) {
                     resultCount++;
-                    File next = new File(rs.getString(2));
-                    if (next.exists()) {
-                        result.add(next);
+                    ItemNode item = container.getItem(new File(rs.getString(2)));
+                    if (item != null) {
+                        result.add(item);
                     }
                 }
                 if (resultCount < limit - 1) {

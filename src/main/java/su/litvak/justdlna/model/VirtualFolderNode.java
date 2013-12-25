@@ -2,6 +2,7 @@ package su.litvak.justdlna.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,5 +48,23 @@ public class VirtualFolderNode extends ContainerNode {
         containers.add(container);
         container.setParent(this);
         return this;
+    }
+
+    public ContainerNode removeContainer(ContainerNode container) {
+        if (!(containers instanceof ArrayList<?>)) {
+            containers = new ArrayList<ContainerNode>(containers);
+        }
+        containers.remove(container);
+        return this;
+    }
+
+    public ItemNode getItem(File f) {
+        for (ContainerNode containerNode : getContainers()) {
+            ItemNode item = containerNode.getItem(f);
+            if (item != null) {
+                return item;
+            }
+        }
+        return super.getItem(f);
     }
 }
