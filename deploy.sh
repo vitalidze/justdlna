@@ -6,6 +6,8 @@ PAGES=gh-pages
 VERSION=`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | egrep -Ev '(^\[|Download\w+:)'`
 ARTIFACT_ID=`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.artifactId | egrep -Ev '(^\[|Download\w+:)'`
 
+git stash
+
 mvn clean assembly:assembly
 
 git checkout $PAGES
@@ -20,5 +22,17 @@ git add release/$ARTIFACT_ID-$VERSION-bin.tar.gz release/$ARTIFACT_ID-$VERSION-b
 # git commit
 git commit -m "Release $VERSION"
 git push origin $PAGES
+# update index page from readme.md
+git checkout $BRANCH README.md
+echo '---' > index.md
+echo 'layout: index' >> index.md
+echo '---' >> index.md
+cat README.md >> index.md
+git add index.md
+git reset HEAD README.md
+rm -f README.md
+git commit -m "Updated index page from README.md of $BRANCH branch"
+git push origin $PAGES
 # checkout previous branch
 git checkout $BRANCH
+git stash pop
