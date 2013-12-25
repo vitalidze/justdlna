@@ -19,8 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
                @JsonSubTypes.Type (name="virtual", value=VirtualFolderNode.class)})
 public abstract class ContainerNode extends ContentNode {
     static AtomicInteger idGenerator = new AtomicInteger(0);
-    final String title;
-    List<ContainerNode> containers = Collections.emptyList();
+    private String title;
 
     public ContainerNode(String id, String title) {
         super(id);
@@ -48,33 +47,19 @@ public abstract class ContainerNode extends ContentNode {
         container.setChildCount(Integer.valueOf(0));
         return container;
     }
-    public List<ContainerNode> getContainers() {
-        return containers;
-    }
 
-    @JsonProperty("folders")
-    public void setContainers(List<ContainerNode> containers) {
-        this.containers = containers;
-        for (ContainerNode container : containers) {
-            container.setParent(this);
-        }
-    }
+    public abstract List<ContainerNode> getContainers();
     public abstract List<ItemNode> getItems();
 
     public final int getChildCount() {
         return getContainers().size() + getItems().size();
     }
 
-    public ContainerNode addContainer(ContainerNode container) {
-        if (!(containers instanceof ArrayList<?>)) {
-            containers = new ArrayList<ContainerNode>(containers);
-        }
-        containers.add(container);
-        container.setParent(this);
-        return this;
-    }
-
     public <T extends Enum<T> & MediaFormat> Class<T> getFormatClass() {
         return null;
+    }
+
+    protected void setTitle(String title) {
+        this.title = title;
     }
 }

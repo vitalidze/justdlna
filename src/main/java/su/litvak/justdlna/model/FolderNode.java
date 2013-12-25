@@ -9,7 +9,7 @@ import java.util.List;
 
 import static su.litvak.justdlna.util.HashHelper.sha1;
 
-public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
+public class FolderNode<T extends Enum<T> & MediaFormat> extends VirtualFolderNode {
     final File folder;
     final Class<T> formatClass;
 
@@ -20,13 +20,17 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
                       File folder,
                       @JsonProperty("format")
                       String format) {
-        super(contentId(format, folder), title == null || title.trim().isEmpty() ? folder.getName() : title);
+        super();
+        setId(contentId(format, folder));
+        setTitle(title == null || title.trim().isEmpty() ? folder.getName() : title);
         this.folder = folder;
         this.formatClass = Formats.fromString(format);
     }
 
     public FolderNode(File folder, Class<T> formatClass) {
-        super(contentId(Formats.toString(formatClass), folder), folder.getName());
+        super();
+        setId(contentId(Formats.toString(formatClass), folder));
+        setTitle(folder.getName());
         this.folder = folder;
         this.formatClass = formatClass;
     }

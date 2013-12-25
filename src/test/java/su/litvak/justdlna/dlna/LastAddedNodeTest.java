@@ -18,7 +18,7 @@ public class LastAddedNodeTest extends AbstractTest {
     FolderNode<VideoFormat> folder;
 
     @Before
-    public void mockFiles() throws IOException, InterruptedException {
+    public void prepareConfiguration() throws IOException, InterruptedException {
         folder = mockDir("Video", VideoFormat.class);
 
         for (int i = 0; i < 10; i++) {
@@ -26,17 +26,15 @@ public class LastAddedNodeTest extends AbstractTest {
             files.add(f);
             f.setLastModified(System.currentTimeMillis() - i * 1000);
         }
-    }
 
-    @Before
-    public void prepareConfiguration() {
         Config.get().setContent(new VirtualFolderNode(Arrays.<ContainerNode>asList(folder)));
+
     }
 
     @Test
     public void testVideoSorting() throws IOException {
         LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(null, Formats.VIDEO.name(), 5);
-        Config.get().getContent().addContainer(lastVideos);
+        folder.addContainer(lastVideos);
 
         assertEquals(5, lastVideos.getItems().size());
 
