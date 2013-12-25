@@ -37,8 +37,9 @@ public class ViewLog {
             stmt.executeUpdate("CREATE TABLE " + TBL_VIEW_HISTORY + " (view_date TIMESTAMP NOT NULL, filepath VARCHAR(1024) NOT NULL, format VARCHAR(10) NOT NULL)");
             stmt.executeUpdate("CREATE INDEX " + TBL_VIEW_HISTORY + "_fmt_vd ON " + TBL_VIEW_HISTORY + "(format, view_date)");
         } catch (SQLException sqe) {
-            close(conn, stmt, rs);
             LOG.error("Error occurred while creating view log database", sqe);
+        } finally {
+            close(conn, stmt, rs);
         }
     }
 
@@ -54,8 +55,9 @@ public class ViewLog {
             stmt.executeUpdate();
             conn.commit();
         } catch (SQLException sqe) {
-            close(conn, stmt, null);
             LOG.error("Error occurred while saving log record for: " + file.getAbsolutePath(), sqe);
+        } finally {
+            close(conn, stmt, null);
         }
     }
 
@@ -86,8 +88,9 @@ public class ViewLog {
             }
             return result;
         } catch (SQLException sqe) {
-            close(conn, stmt, rs);
             LOG.error("Error occurred while listing log records", sqe);
+        } finally {
+            close(conn, stmt, rs);
         }
         return Collections.emptyList();
     }
@@ -100,8 +103,9 @@ public class ViewLog {
             stmt = conn.createStatement();
             stmt.executeUpdate("TRUNCATE TABLE " + TBL_VIEW_HISTORY);
         } catch (SQLException sqe) {
-            close(conn, stmt, null);
             LOG.error("Error occurred while clearing view history database", sqe);
+        } finally {
+            close(conn, stmt, null);
         }
     }
 
