@@ -13,6 +13,7 @@ import org.teleal.cling.UpnpServiceImpl;
 import su.litvak.justdlna.dlna.MediaServer;
 import su.litvak.justdlna.model.ContainerNode;
 import su.litvak.justdlna.model.NodesMap;
+import su.litvak.justdlna.model.ViewLog;
 import su.litvak.justdlna.servlet.ContentServlet;
 
 import java.net.*;
@@ -43,6 +44,11 @@ public class Main {
          * Will bind to a single IP address
          */
         System.setProperty("org.teleal.cling.network.useAddresses", Config.get().getIpAddress());
+
+        /**
+         * Create view log database
+         */
+        ViewLog.createDatabase();
 
         /**
          * Initialize root node

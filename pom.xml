@@ -16,6 +16,7 @@
         <jackson.version>1.9.13</jackson.version>
         <jetty.version>8.1.14.v20131031</jetty.version>
         <junit.version>4.11</junit.version>
+        <h2.version>1.3.174</h2.version>
     </properties>
 
     <dependencies>
@@ -57,6 +58,13 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-lgpl</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- h2 database for storing view events -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
         </dependency>
 
         <!-- Testing. -->
