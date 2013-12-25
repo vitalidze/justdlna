@@ -22,7 +22,7 @@ public abstract class AbstractTest {
     }
 
     <T extends Enum<T> & MediaFormat> FolderNode<T> mockDir(final String name, FolderNode<T> parent) {
-        return mockDir(name, parent.getFormatClass(), parent.getFolder());
+        return mockDir(name, (Class<T>) parent.getFormatClass(), parent.getFolder());
     }
 
     <T extends Enum<T> & MediaFormat> FolderNode<T> mockDir(final String name, Class<T> formatClass, File parent) {

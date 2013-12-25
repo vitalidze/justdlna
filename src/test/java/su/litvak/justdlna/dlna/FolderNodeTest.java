@@ -1,14 +1,13 @@
 package su.litvak.justdlna.dlna;
 
 import org.junit.Test;
-import su.litvak.justdlna.model.ContainerNode;
-import su.litvak.justdlna.model.FolderNode;
-import su.litvak.justdlna.model.VideoFormat;
+import su.litvak.justdlna.model.*;
 
 import java.io.IOException;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class FolderNodeTest extends AbstractTest {
     @Test
@@ -41,5 +40,31 @@ public class FolderNodeTest extends AbstractTest {
 
         assertEquals(3, folder1.getContainers().size());
         assertEquals(1, folder1.getItems().size());
+    }
+
+    @Test
+    public void testViewLog() throws IOException {
+        ViewLog.init();
+        ViewLog.clear();
+
+        FolderNode<VideoFormat> video = mockDir("Video", VideoFormat.class);
+        for (int i = 0; i < 5; i++) {
+            mockFile("video " + i, VideoFormat.AVI, video);
+        }
+
+        for (ItemNode item : video.getItems()) {
+            for (int i = 0; i < 3; i++) {
+                ViewLog.log(item.getFile(), item.getParent().getFormatClass());
+            }
+        }
+        assertEquals(1, ViewLog.getLastViewItems(1, VideoFormat.class).size());
+        assertEquals(2, ViewLog.getLastViewItems(2, VideoFormat.class).size());
+        assertEquals(3, ViewLog.getLastViewItems(3, VideoFormat.class).size());
+        assertEquals(4, ViewLog.getLastViewItems(4, VideoFormat.class).size());
+        assertEquals(5, ViewLog.getLastViewItems(5, VideoFormat.class).size());
+        assertEquals(5, ViewLog.getLastViewItems(6, VideoFormat.class).size());
+        assertEquals(5, ViewLog.getLastViewItems(7, VideoFormat.class).size());
+        assertEquals(5, ViewLog.getLastViewItems(8, VideoFormat.class).size());
+        assertEquals(5, ViewLog.getLastViewItems(9, VideoFormat.class).size());
     }
 }

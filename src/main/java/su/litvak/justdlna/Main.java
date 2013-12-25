@@ -48,7 +48,8 @@ public class Main {
         /**
          * Create view log database
          */
-        ViewLog.createDatabase();
+        LOG.info("Initializing view log...");
+        ViewLog.init();
 
         /**
          * Initialize root node

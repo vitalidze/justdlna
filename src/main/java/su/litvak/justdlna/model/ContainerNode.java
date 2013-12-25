@@ -73,4 +73,8 @@ public abstract class ContainerNode extends ContentNode {
         container.setParent(this);
         return this;
     }
+
+    public <T extends Enum<T> & MediaFormat> Class<T> getFormatClass() {
+        return null;
+    }
 }

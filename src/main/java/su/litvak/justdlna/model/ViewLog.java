@@ -5,10 +5,14 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ViewLog {
     private static final Logger LOG = LoggerFactory.getLogger(ViewLog.class);
     private final static String DB_FILE = System.getProperty("user.dir") + File.separatorChar + "logs" + File.separatorChar + "view.log";
+    private final static String TBL_VIEW_HISTORY = "VIEW_HISTORY";
 
     static {
         try {
@@ -18,18 +22,86 @@ public class ViewLog {
         }
     }
 
-    public static void createDatabase() {
+    public static void init() {
         Connection conn = null;
+        Statement stmt = null;
         ResultSet rs = null;
         try {
             conn = getConnection();
-            rs = conn.getMetaData().getTables(null, "PUBLIC", null, null);
-            while (rs.next()) {
-                LOG.info("TABLE: " + rs.getString("TABLE_NAME"));
+            rs = conn.getMetaData().getTables(null, "PUBLIC", TBL_VIEW_HISTORY, null);
+            if (rs.next()) {
+                return;
             }
+            LOG.info("Creating " + TBL_VIEW_HISTORY + " table");
+            stmt = conn.createStatement();
+            stmt.executeUpdate("CREATE TABLE " + TBL_VIEW_HISTORY + " (view_date TIMESTAMP NOT NULL, filepath VARCHAR(1024) NOT NULL, format VARCHAR(10) NOT NULL)");
+            stmt.executeUpdate("CREATE INDEX " + TBL_VIEW_HISTORY + "_fmt_vd ON " + TBL_VIEW_HISTORY + "(format, view_date)");
         } catch (SQLException sqe) {
-            close(conn, null, rs);
+            close(conn, stmt, rs);
             LOG.error("Error occurred while creating view log database", sqe);
+        }
+    }
+
+    public static <T extends Enum<T> & MediaFormat> void log(File file, Class<T> formatClass) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = getConnection();
+            stmt = conn.prepareStatement("INSERT INTO " + TBL_VIEW_HISTORY + " (view_date, filepath, format) VALUES (?, ?, ?)");
+            stmt.setDate(1, new java.sql.Date(System.currentTimeMillis()));
+            stmt.setString(2, file.getAbsolutePath());
+            stmt.setString(3, Formats.toString(formatClass));
+            stmt.executeUpdate();
+            conn.commit();
+        } catch (SQLException sqe) {
+            close(conn, stmt, null);
+            LOG.error("Error occurred while saving log record for: " + file.getAbsolutePath(), sqe);
+        }
+    }
+
+    public static <T extends Enum<T> & MediaFormat> List<File> getLastViewItems(int limit, Class<T> formatClass) {
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = getConnection();
+            stmt = conn.createStatement();
+            List<File> result = new ArrayList<File>(limit);
+            int offset = 0;
+            while (result.size() < limit) {
+                rs = stmt.executeQuery("SELECT DISTINCT view_date, filepath FROM " + TBL_VIEW_HISTORY + " WHERE format='" + Formats.toString(formatClass) +  "' ORDER BY view_date DESC LIMIT " + limit + " OFFSET " + offset);
+
+                int resultCount = 0;
+                while (rs.next()) {
+                    resultCount++;
+                    File next = new File(rs.getString(2));
+                    if (next.exists()) {
+                        result.add(next);
+                    }
+                }
+                if (resultCount < limit - 1) {
+                    return result;
+                }
+                offset += limit;
+            }
+            return result;
+        } catch (SQLException sqe) {
+            close(conn, stmt, rs);
+            LOG.error("Error occurred while listing log records", sqe);
+        }
+        return Collections.emptyList();
+    }
+
+    public static void clear() {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            conn = getConnection();
+            stmt = conn.createStatement();
+            stmt.executeUpdate("TRUNCATE TABLE " + TBL_VIEW_HISTORY);
+        } catch (SQLException sqe) {
+            close(conn, stmt, null);
+            LOG.error("Error occurred while clearing view history database", sqe);
         }
     }
 

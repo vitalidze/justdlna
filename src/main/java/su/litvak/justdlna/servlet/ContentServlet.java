@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.litvak.justdlna.model.ItemNode;
 import su.litvak.justdlna.model.NodesMap;
+import su.litvak.justdlna.model.ViewLog;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +41,7 @@ public final class ContentServlet extends DefaultServlet {
 	public Resource getResource (final String pathInContext) {
 		try {
 			final ItemNode node = (ItemNode) NodesMap.get(URLDecoder.decode(pathInContext.replaceFirst("/", ""), "UTF-8"));
+            ViewLog.log(node.getFile(), node.getParent().getFormatClass());
             return node == null ? null : Resource.newResource(node.getFile());
 		}
 		catch (final IOException e) {

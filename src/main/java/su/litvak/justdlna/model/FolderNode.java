@@ -67,10 +67,6 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
         return folder;
     }
 
-    public Class<T> getFormatClass() {
-        return formatClass;
-    }
-
     private static String contentId(String format, File folder) {
         return format + (sha1(folder.getAbsolutePath()) + "-" + getSafeName(folder));
     }
@@ -85,5 +81,9 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends ContainerNode {
         } catch (IllegalArgumentException iae) {
         }
         return null;
+    }
+
+    public <T extends Enum<T> & MediaFormat> Class<T> getFormatClass() {
+        return (Class<T>) formatClass;
     }
 }
