@@ -31,5 +31,10 @@
                 <exclude>*</exclude>
             </excludes>
         </fileSet>
+        <!-- sample config file to be used as a starting point -->
+        <fileSet>
+            <directory>etc</directory>
+            <outputDirectory>/etc/</outputDirectory>
+        </fileSet>
     </fileSets>
 </assembly>

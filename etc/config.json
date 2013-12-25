@@ -1,0 +1,8 @@
+{
+    "content": { "virtual" : {
+        "folders" : [
+            { "last-added" : { "format" : "video" } },
+            { "last-viewed" : { "format" : "video" } }
+        ]}
+    }
+}
