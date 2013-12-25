@@ -19,7 +19,7 @@
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>log/justdlna.%d{yyyy-MM-dd}.log.%i.zip</fileNamePattern>
+            <fileNamePattern>logs/justdlna.%d{yyyy-MM-dd}.log.%i.zip</fileNamePattern>
 
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
