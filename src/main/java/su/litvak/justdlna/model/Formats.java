@@ -15,7 +15,7 @@ public enum Formats {
         return (Class<T>) valueOf(s.toUpperCase()).formatClass;
     }
 
-    public static <T extends Enum<T> & MediaFormat> String toString(Class<T> formatClass) {
+    public static String toString(Class<? extends MediaFormat> formatClass) {
         for (Formats f : values()) {
             if (f.formatClass == formatClass) {
                 return f.name().toLowerCase();

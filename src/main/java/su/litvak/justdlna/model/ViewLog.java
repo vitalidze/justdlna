@@ -43,7 +43,7 @@ public class ViewLog {
         }
     }
 
-    public static <T extends Enum<T> & MediaFormat> void log(File file, Class<T> formatClass) {
+    public static void log(File file, Class<? extends MediaFormat> formatClass) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {

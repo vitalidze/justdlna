@@ -50,7 +50,7 @@ public class LastAddedNode<T extends Enum<T> & MediaFormat> extends ContainerNod
         return result;
     }
 
-    public <T extends Enum<T> & MediaFormat> Class<T> getFormatClass() {
-        return (Class<T>) formatClass;
+    public Class<? extends MediaFormat> getFormatClass() {
+        return formatClass;
     }
 }

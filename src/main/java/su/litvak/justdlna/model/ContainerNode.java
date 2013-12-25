@@ -54,7 +54,7 @@ public abstract class ContainerNode extends ContentNode {
         return getContainers().size() + getItems().size();
     }
 
-    public <T extends Enum<T> & MediaFormat> Class<T> getFormatClass() {
+    public Class<? extends MediaFormat> getFormatClass() {
         return null;
     }
 

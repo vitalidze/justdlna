@@ -28,7 +28,7 @@ public class LastViewedNode<T extends Enum<T> & MediaFormat> extends ContainerNo
         return ViewLog.getLastViewItems(limit, formatClass, getParent());
     }
 
-    public <T extends Enum<T> & MediaFormat> Class<T> getFormatClass() {
-        return (Class<T>) formatClass;
+    public Class<? extends MediaFormat> getFormatClass() {
+        return formatClass;
     }
 }
