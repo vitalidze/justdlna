@@ -9,6 +9,15 @@
     <link rel="stylesheet" type="text/css" media="screen" href="{{ site.path }}/stylesheets/stylesheet.css">
 
     <title>JustDLNA</title>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46756892-1', 'vitalidze.github.io');
+  ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -48,19 +57,25 @@
 $.get("release/latest")
 .done(function ( data ) {
     var v = data;
-    $('.zip_download_link').prop("href", "release/justdlna-" + v + "-bin.zip")
-    $('.tar_download_link').prop("href", "release/justdlna-" + v + "-bin.tar.gz")
+    $('.zip_download_link').prop("href", "release/justdlna-" + v + "-bin.zip").click(function() {
+      ga('send', 'event', {
+        'eventCategory' : 'download-link',
+        'eventAction' : 'click',
+        'eventLabel' : 'download-zip',
+        'hitCallback' : function () {
+            document.location = u;
+        }
+      });
+    $('.tar_download_link').prop("href", "release/justdlna-" + v + "-bin.tar.gz").click(function() {
+      ga('send', 'event', {
+        'eventCategory' : 'download-link',
+        'eventAction' : 'click',
+        'eventLabel' : 'download-tgz',
+        'hitCallback' : function () {
+            document.location = u;
+        }
+      });
 });
 </script>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-46756892-1', 'vitalidze.github.io');
-  ga('send', 'pageview');
-</script>
-
   </body>
 </html>
