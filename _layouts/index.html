@@ -57,24 +57,26 @@
 $.get("release/latest")
 .done(function ( data ) {
     var v = data;
-    $('.zip_download_link').prop("href", "release/justdlna-" + v + "-bin.zip").click(function() {
+    var uzip = "release/justdlna-" + v + "-bin.zip";
+    $('.zip_download_link').prop("href", uzip).click(function() {
       ga('send', 'event', {
         'eventCategory' : 'download-link',
         'eventAction' : 'click',
         'eventLabel' : 'download-zip',
         'hitCallback' : function () {
-            document.location = u;
+            document.location = uzip;
         }
       });
       return false;
     });
-   $('.tar_download_link').prop("href", "release/justdlna-" + v + "-bin.tar.gz").click(function() {
+   var utgz = "release/justdlna-" + v + "-bin.tar.gz";
+   $('.tar_download_link').prop("href", utgz).click(function() {
       ga('send', 'event', {
         'eventCategory' : 'download-link',
         'eventAction' : 'click',
         'eventLabel' : 'download-tgz',
         'hitCallback' : function () {
-            document.location = u;
+            document.location = utgz;
         }
       });
       return false;
