@@ -66,7 +66,9 @@ $.get("release/latest")
             document.location = u;
         }
       });
-    $('.tar_download_link').prop("href", "release/justdlna-" + v + "-bin.tar.gz").click(function() {
+      return false;
+    });
+   $('.tar_download_link').prop("href", "release/justdlna-" + v + "-bin.tar.gz").click(function() {
       ga('send', 'event', {
         'eventCategory' : 'download-link',
         'eventAction' : 'click',
@@ -75,6 +77,8 @@ $.get("release/latest")
             document.location = u;
         }
       });
+      return false;
+    });
 });
 </script>
   </body>
