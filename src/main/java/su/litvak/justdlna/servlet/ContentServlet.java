@@ -41,8 +41,11 @@ public final class ContentServlet extends DefaultServlet {
 	public Resource getResource (final String pathInContext) {
 		try {
 			final ItemNode node = (ItemNode) NodesMap.get(URLDecoder.decode(pathInContext.replaceFirst("/", ""), "UTF-8"));
+            if (node == null) {
+                return null;
+            }
             ViewLog.log(node.getFile(), node.getParent().getFormatClass());
-            return node == null ? null : Resource.newResource(node.getFile());
+            return Resource.newResource(node.getFile());
 		}
 		catch (final IOException e) {
 			LOG.warn("Failed to serve resource '{}': {}", pathInContext, e.getMessage());

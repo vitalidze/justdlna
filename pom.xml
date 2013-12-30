@@ -17,6 +17,7 @@
         <jetty.version>8.1.14.v20131031</jetty.version>
         <junit.version>4.11</junit.version>
         <h2.version>1.3.174</h2.version>
+        <jmockit.version>1.6</jmockit.version>
     </properties>
 
     <dependencies>
@@ -68,7 +69,12 @@
         </dependency>
 
         <!-- Testing. -->
-
+        <dependency>
+            <groupId>com.googlecode.jmockit</groupId>
+            <artifactId>jmockit</artifactId>
+            <version>${jmockit.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

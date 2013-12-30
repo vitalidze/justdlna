@@ -11,6 +11,7 @@ import su.litvak.justdlna.model.*;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ContentDirectoryServiceTest extends AbstractTest {
     private ContentDirectoryService service;
@@ -50,5 +51,8 @@ public class ContentDirectoryServiceTest extends AbstractTest {
         assertEquals(0, didl.getContainers().size());
         assertEquals("Test 47.avi", didl.getItems().get(0).getTitle());
         assertEquals("Test 48.avi", didl.getItems().get(1).getTitle());
+
+        assertNotNull(NodesMap.get(didl.getItems().get(0).getId()));
+        assertNotNull(NodesMap.get(didl.getItems().get(1).getId()));
 	}
 }

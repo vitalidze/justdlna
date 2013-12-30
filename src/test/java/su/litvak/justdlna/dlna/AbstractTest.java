@@ -12,26 +12,26 @@ import java.io.IOException;
 import static su.litvak.justdlna.util.FileHelper.touch;
 
 public abstract class AbstractTest {
-    final static String ROOT_ID = "0";
+    protected final static String ROOT_ID = "0";
 
     @Rule
     public TemporaryFolder tmp = new TemporaryFolder();
 
-    <T extends Enum<T> & MediaFormat> FolderNode<T> mockDir(final String name, Class<T> formatClass) {
+    protected <T extends Enum<T> & MediaFormat> FolderNode<T> mockDir(final String name, Class<T> formatClass) {
         return mockDir(name, formatClass, this.tmp.getRoot());
     }
 
-    <T extends Enum<T> & MediaFormat> FolderNode<T> mockDir(final String name, FolderNode<T> parent) {
+    protected <T extends Enum<T> & MediaFormat> FolderNode<T> mockDir(final String name, FolderNode<T> parent) {
         return mockDir(name, (Class<T>) parent.getFormatClass(), parent.getFolder());
     }
 
-    <T extends Enum<T> & MediaFormat> FolderNode<T> mockDir(final String name, Class<T> formatClass, File parent) {
+    protected <T extends Enum<T> & MediaFormat> FolderNode<T> mockDir(final String name, Class<T> formatClass, File parent) {
         File d = new File(parent, name);
         d.mkdirs();
         return new FolderNode<T>(d.getName(), d, Formats.toString(formatClass));
     }
 
-    static File mockFile(final String name, MediaFormat format, final FolderNode<?> parent) throws IOException {
+    protected static File mockFile(final String name, MediaFormat format, final FolderNode<?> parent) throws IOException {
         File f = new File(parent.getFolder(), name + '.' + format.getExt());
         touch(f);
         return f;
