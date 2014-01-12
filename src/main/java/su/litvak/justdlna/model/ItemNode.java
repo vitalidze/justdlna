@@ -32,4 +32,8 @@ public class ItemNode extends ContentNode {
     public File getFile() {
         return file;
     }
+
+    public MediaFormat getFormat() {
+        return format;
+    }
 }

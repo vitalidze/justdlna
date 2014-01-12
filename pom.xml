@@ -14,7 +14,6 @@
         <logback.version>1.0.9</logback.version>
         <slf4j.version>1.7.2</slf4j.version>
         <jackson.version>1.9.13</jackson.version>
-        <jetty.version>8.1.14.v20131031</jetty.version>
         <junit.version>4.11</junit.version>
         <h2.version>1.3.174</h2.version>
         <jmockit.version>1.6</jmockit.version>
@@ -26,13 +25,6 @@
             <groupId>org.teleal.cling</groupId>
             <artifactId>cling-support</artifactId>
             <version>${cling.version}</version>
-        </dependency>
-
-        <!-- Jetty -->
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-            <version>${jetty.version}</version>
         </dependency>
 
         <!-- Logging -->

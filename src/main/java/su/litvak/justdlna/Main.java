@@ -1,22 +1,15 @@
 package su.litvak.justdlna;
 
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.teleal.cling.UpnpService;
 import org.teleal.cling.UpnpServiceImpl;
 import su.litvak.justdlna.dlna.MediaServer;
+import su.litvak.justdlna.http.Server;
 import su.litvak.justdlna.model.ContainerNode;
 import su.litvak.justdlna.model.NodesMap;
 import su.litvak.justdlna.model.ViewLog;
-import su.litvak.justdlna.servlet.ContentServlet;
 
 import java.net.*;
 import java.util.ArrayList;
@@ -73,8 +66,10 @@ public class Main {
         /**
          * Start up content serving service
          */
-        final Server server = makeContentServer();
+        LOG.info("Starting HTTP server...");
+        final Server server = new Server();
         server.start();
+        LOG.info("HTTP server started");
 
         /**
          * Register shutdown hook
@@ -86,39 +81,14 @@ public class Main {
 
                 LOG.info("Shutting down Cling UPNP service");
                 upnpService.shutdown();
-                LOG.info("Shutting down jetty");
+                LOG.info("Shutting down HTTP server");
                 try {
                     server.stop();
                 } catch (Exception ex) {
-                    LOG.error("Error occurred during jetty shutdown", ex);
+                    LOG.error("Error occurred during HTTP server shutdown", ex);
                 }
             }
         });
-
-        /**
-         * Leave application running
-         */
-        server.join();
-    }
-
-    private static Server makeContentServer () {
-        final ServletContextHandler servletHandler = new ServletContextHandler();
-        servletHandler.setContextPath("/");
-        servletHandler.addServlet(new ServletHolder(new ContentServlet()), "/");
-//        servletHandler.addServlet(new ServletHolder(new IndexServlet(contentTree)), "/index/*");
-
-        final HandlerList handler = new HandlerList();
-        handler.setHandlers(new Handler[] { servletHandler });
-
-        final Server server = new Server();
-
-        Connector connector = new SelectChannelConnector();
-        connector.setPort(Config.get().getHttpPort());
-        connector.setMaxIdleTime(0);
-        server.setConnectors(new Connector[] {connector});
-
-        server.setHandler(handler);
-        return server;
     }
 
     private static void bridgeJul() {
