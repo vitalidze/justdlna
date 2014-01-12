@@ -7,17 +7,14 @@ import su.litvak.justdlna.Config;
 import su.litvak.justdlna.model.ItemNode;
 import su.litvak.justdlna.model.NodesMap;
 import su.litvak.justdlna.model.ViewLog;
+import su.litvak.justdlna.util.RandomAccessFileInputStream;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Iterator;
 import java.util.Map;
 
 public class Server extends NanoHTTPD {
     private static final Logger LOG = LoggerFactory.getLogger(Server.class);
-
 
     public Server() {
         super(Config.get().getHttpPort());
@@ -82,23 +79,16 @@ public class Server extends NanoHTTPD {
                 } else {
                     if (endAt < 0) {
                         endAt = fileLen - 1;
-                    }
-                    long newLen = endAt - startFrom + 1;
-                    if (newLen < 0) {
-                        newLen = 0;
+                    } else {
+                        endAt += 1;
                     }
 
-                    final long dataLen = newLen;
-                    FileInputStream fis = new FileInputStream(file) {
-                        @Override
-                        public int available() throws IOException {
-                            return (int) dataLen;
-                        }
-                    };
-                    fis.skip(startFrom);
+                    RandomAccessFileInputStream fis = new RandomAccessFileInputStream(file);
+                    fis.seek(startFrom);
+                    fis.limit(endAt);
 
                     Response res = createResponse(Response.Status.PARTIAL_CONTENT, node.getFormat().getMime(), fis);
-                    res.addHeader("Content-Length", "" + dataLen);
+                    res.addHeader("Content-Length", "" + fis.available());
                     res.addHeader("Content-Range", "bytes " + startFrom + "-" + endAt + "/" + fileLen);
                     res.addHeader("ETag", etag);
                     ViewLog.log(file, node.getParent().getFormatClass());
@@ -108,7 +98,7 @@ public class Server extends NanoHTTPD {
                 if (etag.equals(header.get("if-none-match")))
                     return createResponse(Response.Status.NOT_MODIFIED, node.getFormat().getMime(), "");
 
-                Response res = createResponse(Response.Status.OK, node.getFormat().getMime(), new FileInputStream(file));
+                Response res = createResponse(Response.Status.OK, node.getFormat().getMime(), new RandomAccessFileInputStream(file));
                 res.addHeader("Content-Length", "" + fileLen);
                 res.addHeader("ETag", etag);
                 ViewLog.log(file, node.getParent().getFormatClass());
