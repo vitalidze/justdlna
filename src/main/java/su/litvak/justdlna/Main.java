@@ -1,8 +1,10 @@
 package su.litvak.justdlna;
 
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
@@ -108,7 +110,13 @@ public class Main {
         final HandlerList handler = new HandlerList();
         handler.setHandlers(new Handler[] { servletHandler });
 
-        final Server server = new Server(Config.get().getHttpPort());
+        final Server server = new Server();
+
+        Connector connector = new SelectChannelConnector();
+        connector.setPort(Config.get().getHttpPort());
+        connector.setMaxIdleTime(0);
+        server.setConnectors(new Connector[] {connector});
+
         server.setHandler(handler);
         return server;
     }
