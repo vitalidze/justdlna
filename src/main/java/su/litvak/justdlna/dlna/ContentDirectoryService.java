@@ -29,6 +29,13 @@ public class ContentDirectoryService extends AbstractContentDirectoryService {
     @Override
     public BrowseResult browse (final String objectID, final BrowseFlag browseFlag, final String filter, final long firstResult, final long maxResults, final SortCriterion[] orderby) throws ContentDirectoryException {
         LOG.info("browse: {} ({}, {})", objectID, firstResult, maxResults);
+        long _maxResults = maxResults;
+        if (_maxResults == 0) {
+            _maxResults = 128 * 1024;
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("adjusted max results {} -> {}", maxResults, _maxResults);
+            }
+        }
         try {
             final DIDLContent didl = new DIDLContent();
             final ContentNode node = NodesMap.get(objectID);
@@ -53,7 +60,7 @@ public class ContentDirectoryService extends AbstractContentDirectoryService {
 
             if (containerNodes.size() > firstResult) {
                 final int from = (int) firstResult;
-                final int to = Math.min((int) (firstResult + maxResults), containerNodes.size());
+                final int to = Math.min((int) (firstResult + _maxResults), containerNodes.size());
                 for (ContainerNode containerNodeX : containerNodes.subList(from, to)) {
                     NodesMap.put(containerNodeX.getId(), containerNodeX);
                     Container containerX = containerNodeX.getContainer();
@@ -61,9 +68,9 @@ public class ContentDirectoryService extends AbstractContentDirectoryService {
                     didl.addContainer(containerX);
                 }
             }
-            if (didl.getContainers().size() < maxResults) {
+            if (didl.getContainers().size() < _maxResults) {
                 final int from = (int) Math.max(firstResult - containerNodes.size(), 0);
-                final int to = Math.min(itemNodes.size(), from + (int) (maxResults - containerNodes.size()));
+                final int to = Math.min(itemNodes.size(), from + (int) (_maxResults - containerNodes.size()));
                 for (ItemNode itemNode : itemNodes.subList(from, to)) {
                     NodesMap.put(itemNode.getId(), itemNode);
                     Item item = itemNode.getItem();
