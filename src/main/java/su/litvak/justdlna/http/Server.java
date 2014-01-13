@@ -79,16 +79,14 @@ public class Server extends NanoHTTPD {
                 } else {
                     if (endAt < 0) {
                         endAt = fileLen - 1;
-                    } else {
-                        endAt += 1;
                     }
 
                     RandomAccessFileInputStream fis = new RandomAccessFileInputStream(file);
                     fis.seek(startFrom);
-                    fis.limit(endAt);
+                    fis.limit(endAt + 1);
 
                     Response res = createResponse(Response.Status.PARTIAL_CONTENT, node.getFormat().getMime(), fis);
-                    res.addHeader("Content-Length", "" + fis.available());
+                    res.addHeader("Content-Length", Integer.toString(fis.available()));
                     res.addHeader("Content-Range", "bytes " + startFrom + "-" + endAt + "/" + fileLen);
                     res.addHeader("ETag", etag);
                     ViewLog.log(file, node.getParent().getFormatClass());
