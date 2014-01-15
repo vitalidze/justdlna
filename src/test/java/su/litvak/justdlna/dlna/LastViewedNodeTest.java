@@ -3,17 +3,13 @@ package su.litvak.justdlna.dlna;
 import org.junit.Before;
 import org.junit.Test;
 import su.litvak.justdlna.model.*;
+import su.litvak.justdlna.util.FileHelper;
 
 import java.io.IOException;
 
 import static org.junit.Assert.*;
 
 public class LastViewedNodeTest extends AbstractTest {
-    @Before
-    public void initViewLog() {
-        ViewLog.clear();
-        ViewLog.init();
-    }
 
     @Test
     public void testUnMappedFolders() throws IOException {
@@ -23,8 +19,8 @@ public class LastViewedNodeTest extends AbstractTest {
         LastViewedNode<VideoFormat> lastViewed = new LastViewedNode<VideoFormat>(null, Formats.VIDEO.name(), 3);
         video.addContainer(lastViewed);
 
-        ViewLog.log(mockFile("test 1", VideoFormat.MKV, video), VideoFormat.class);
-        ViewLog.log(mockFile("test 2", VideoFormat.MKV, subVideo), VideoFormat.class);
+        FileHelper.access(mockFile("test 1", VideoFormat.MKV, video));
+        FileHelper.access(mockFile("test 2", VideoFormat.MKV, subVideo));
 
         assertEquals(2, lastViewed.getItems().size());
         assertEquals(0, lastViewed.getContainers().size());

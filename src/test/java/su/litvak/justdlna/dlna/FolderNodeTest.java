@@ -2,6 +2,7 @@ package su.litvak.justdlna.dlna;
 
 import org.junit.Test;
 import su.litvak.justdlna.model.*;
+import su.litvak.justdlna.util.FileHelper;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -44,9 +45,6 @@ public class FolderNodeTest extends AbstractTest {
 
     @Test
     public void testViewLog() throws IOException {
-        ViewLog.init();
-        ViewLog.clear();
-
         FolderNode<VideoFormat> video = mockDir("Video", VideoFormat.class);
         for (int i = 0; i < 5; i++) {
             mockFile("video " + i, VideoFormat.AVI, video);
@@ -54,7 +52,7 @@ public class FolderNodeTest extends AbstractTest {
 
         for (ItemNode item : video.getItems()) {
             for (int i = 0; i < 3; i++) {
-                ViewLog.log(item.getFile(), item.getParent().getFormatClass());
+                FileHelper.access(item.getFile());
             }
         }
 

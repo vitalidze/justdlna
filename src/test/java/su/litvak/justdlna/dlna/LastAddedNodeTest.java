@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import su.litvak.justdlna.Config;
 import su.litvak.justdlna.model.*;
+import su.litvak.justdlna.util.FileHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,15 +61,12 @@ public class LastAddedNodeTest extends AbstractTest {
     }
 
     @Test
-    public void testViewLog() {
-        ViewLog.init();
-        ViewLog.clear();
-
+    public void testViewLog() throws IOException {
         LastAddedNode<VideoFormat> lastVideos = new LastAddedNode<VideoFormat>(null, Formats.VIDEO.name(), 5);
         folder.addContainer(lastVideos);
         for (ItemNode item : lastVideos.getItems()) {
             for (int i = 0; i < 3; i++) {
-                ViewLog.log(item.getFile(), item.getParent().getFormatClass());
+                FileHelper.access(item.getFile());
             }
         }
 

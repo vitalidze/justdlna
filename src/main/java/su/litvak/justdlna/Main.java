@@ -9,7 +9,6 @@ import su.litvak.justdlna.dlna.MediaServer;
 import su.litvak.justdlna.http.Server;
 import su.litvak.justdlna.model.ContainerNode;
 import su.litvak.justdlna.model.NodesMap;
-import su.litvak.justdlna.model.ViewLog;
 
 import java.net.*;
 import java.util.ArrayList;
@@ -39,12 +38,6 @@ public class Main {
          * Will bind to a single IP address
          */
         System.setProperty("org.teleal.cling.network.useAddresses", Config.get().getIpAddress());
-
-        /**
-         * Create view log database
-         */
-        LOG.info("Initializing view log...");
-        ViewLog.init();
 
         /**
          * Initialize root node

@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import su.litvak.justdlna.Config;
 import su.litvak.justdlna.model.ItemNode;
 import su.litvak.justdlna.model.NodesMap;
-import su.litvak.justdlna.model.ViewLog;
 import su.litvak.justdlna.util.RandomAccessFileInputStream;
 
 import java.io.*;
@@ -89,7 +88,6 @@ public class Server extends NanoHTTPD {
                     res.addHeader("Content-Length", Integer.toString(fis.available()));
                     res.addHeader("Content-Range", "bytes " + startFrom + "-" + endAt + "/" + fileLen);
                     res.addHeader("ETag", etag);
-                    ViewLog.log(file, node.getParent().getFormatClass());
                     return res;
                 }
             } else {
@@ -99,7 +97,6 @@ public class Server extends NanoHTTPD {
                 Response res = createResponse(Response.Status.OK, node.getFormat().getMime(), new RandomAccessFileInputStream(file));
                 res.addHeader("Content-Length", "" + fileLen);
                 res.addHeader("ETag", etag);
-                ViewLog.log(file, node.getParent().getFormatClass());
                 return res;
             }
         } catch (IOException ioe) {
