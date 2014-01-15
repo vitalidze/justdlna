@@ -48,8 +48,8 @@ public class ViewLog {
         PreparedStatement stmt = null;
         try {
             conn = getConnection();
-            stmt = conn.prepareStatement("INSERT INTO " + TBL_VIEW_HISTORY + " (view_date, filepath, format) VALUES (?, ?, ?)");
-            stmt.setDate(1, new java.sql.Date(System.currentTimeMillis()));
+            stmt = conn.prepareStatement("MERGE INTO " + TBL_VIEW_HISTORY + "(view_date, filepath, format) KEY(filepath) VALUES (?, ?, ?)");
+            stmt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
             stmt.setString(2, file.getAbsolutePath());
             stmt.setString(3, Formats.toString(formatClass));
             stmt.executeUpdate();

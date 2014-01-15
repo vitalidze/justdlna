@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import su.litvak.justdlna.model.*;
 
+import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
@@ -34,6 +35,39 @@ public class LastViewedNodeTest extends AbstractTest {
          */
         video.removeContainer(subVideo);
         assertEquals(1, lastViewed.getItems().size());
+    }
 
+    @Test
+    public void testDuplicates() throws IOException, InterruptedException {
+        FolderNode<VideoFormat> video = mockDir("Video", VideoFormat.class);
+        LastViewedNode<VideoFormat> lastViewed = new LastViewedNode<VideoFormat>(null, Formats.VIDEO.name(), 3);
+        video.addContainer(lastViewed);
+
+        File file = mockFile("movie 1", VideoFormat.AVI, video);
+
+        ViewLog.log(file, VideoFormat.class);
+        Thread.sleep(10);
+        ViewLog.log(file, VideoFormat.class);
+
+        assertEquals(1, lastViewed.getItems().size());
+    }
+
+    @Test
+    public void testOrder() throws IOException, InterruptedException {
+        FolderNode<VideoFormat> video = mockDir("Video", VideoFormat.class);
+        LastViewedNode<VideoFormat> lastViewed = new LastViewedNode<VideoFormat>(null, Formats.VIDEO.name(), 3);
+        video.addContainer(lastViewed);
+
+        File movie1 = mockFile("movie 1", VideoFormat.AVI, video);
+        File movie2 = mockFile("movie 2", VideoFormat.AVI, video);
+        mockFile("movie 3", VideoFormat.AVI, video);
+
+        ViewLog.log(movie1, VideoFormat.class);
+        Thread.sleep(10);
+        ViewLog.log(movie2, VideoFormat.class);
+
+        assertEquals(2, lastViewed.getItems().size());
+        assertEquals(movie2, lastViewed.getItems().get(0).getFile());
+        assertEquals(movie1, lastViewed.getItems().get(1).getFile());
     }
 }
