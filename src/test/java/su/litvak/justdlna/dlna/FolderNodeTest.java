@@ -66,4 +66,13 @@ public class FolderNodeTest extends AbstractTest {
             assertEquals(0, lastViewed.getContainers().size());
         }
     }
+
+    @Test
+    public void testNonExistentFolder() {
+        FolderNode<VideoFormat> video = mockDir("Vids", VideoFormat.class);
+        video.getFolder().delete();
+
+        assertTrue(video.getContainers().isEmpty());
+        assertTrue(video.getItems().isEmpty());
+    }
 }

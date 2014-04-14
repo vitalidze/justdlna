@@ -2,6 +2,8 @@ package su.litvak.justdlna.model;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,8 +12,11 @@ import java.util.List;
 import static su.litvak.justdlna.util.HashHelper.sha1;
 
 public class FolderNode<T extends Enum<T> & MediaFormat> extends VirtualFolderNode {
+    private static final Logger LOG = LoggerFactory.getLogger(FolderNode.class);
+
     final File folder;
     final Class<T> formatClass;
+    final static File[] EMPTY_FILE_ARR = new File[0];
 
     @JsonCreator
     public FolderNode(@JsonProperty("title")
@@ -38,7 +43,7 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends VirtualFolderNo
     @Override
     public List<ContainerNode> getContainers() {
         List<ContainerNode> result = new ArrayList<ContainerNode>(super.getContainers());
-        for (File file : folder.listFiles()) {
+        for (File file : listFiles()) {
             if (file.isDirectory()) {
                 FolderNode subFolder = new FolderNode(file, formatClass);
                 if (!subFolder.getItems().isEmpty() || !subFolder.getContainers().isEmpty()) {
@@ -53,7 +58,7 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends VirtualFolderNo
     @Override
     public List<ItemNode> getItems() {
         List<ItemNode> result = new ArrayList<ItemNode>();
-        for (File file : folder.listFiles()) {
+        for (File file : listFiles()) {
             if (file.isFile()) {
                 MediaFormat format = getFormat(file.getName().substring(file.getName().lastIndexOf('.') + 1).toUpperCase(), this.formatClass);
                 if (format == null) {
@@ -65,6 +70,17 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends VirtualFolderNo
             }
         }
         return result;
+    }
+
+    private File[] listFiles() {
+        if (!folder.exists()) {
+            LOG.warn("{} does not exist", folder);
+            return EMPTY_FILE_ARR;
+        } else if (!folder.isDirectory()) {
+            LOG.warn("{} is not a directory", folder);
+            return EMPTY_FILE_ARR;
+        }
+        return folder.listFiles();
     }
 
     public File getFolder() {
