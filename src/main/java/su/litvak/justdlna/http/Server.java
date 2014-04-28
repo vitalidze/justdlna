@@ -89,6 +89,7 @@ public class Server extends NanoHTTPD {
                     res.addHeader("Content-Length", Integer.toString(fis.available()));
                     res.addHeader("Content-Range", "bytes " + startFrom + "-" + endAt + "/" + fileLen);
                     res.addHeader("ETag", etag);
+                    dumpHeaders(res);
                     ViewLog.log(file, node.getParent().getFormatClass());
                     return res;
                 }
@@ -99,6 +100,7 @@ public class Server extends NanoHTTPD {
                 Response res = createResponse(Response.Status.OK, node.getFormat().getMime(), new RandomAccessFileInputStream(file));
                 res.addHeader("Content-Length", "" + fileLen);
                 res.addHeader("ETag", etag);
+                dumpHeaders(res);
                 ViewLog.log(file, node.getParent().getFormatClass());
                 return res;
             }
@@ -118,5 +120,14 @@ public class Server extends NanoHTTPD {
         Response res = new Response(status, mimeType, message);
         res.addHeader("Accept-Ranges", "bytes");
         return res;
+    }
+
+    private void dumpHeaders(Response response) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("RESPONSE HEADERS:");
+            for (Map.Entry<String, String> entry : response.getHeaders().entrySet()) {
+                LOG.debug("{} = {}", entry.getKey(), entry.getValue());
+            }
+        }
     }
 }
