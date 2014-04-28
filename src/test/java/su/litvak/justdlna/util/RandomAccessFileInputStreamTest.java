@@ -1,11 +1,14 @@
 package su.litvak.justdlna.util;
 
+import mockit.Mocked;
+import mockit.NonStrictExpectations;
 import org.junit.Before;
 import org.junit.Test;
 import su.litvak.justdlna.dlna.AbstractTest;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 import static org.junit.Assert.*;
 
@@ -60,5 +63,15 @@ public class RandomAccessFileInputStreamTest extends AbstractTest {
         RandomAccessFileInputStream rafis = new RandomAccessFileInputStream(file);
         rafis.limit(string.length() + 1);
         assertEquals(string, StreamHelper.toString(rafis));
+    }
+
+    @Test
+    public void testAvailableBigFileSize(final @Mocked RandomAccessFile file) throws IOException {
+        new NonStrictExpectations() {{
+            file.length(); result = 2341471881l;
+        }};
+
+        RandomAccessFileInputStream rafis = new RandomAccessFileInputStream(file);
+        assertTrue(rafis.available() > 0);
     }
 }

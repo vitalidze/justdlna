@@ -10,7 +10,11 @@ public class RandomAccessFileInputStream extends InputStream {
     private long limit = -1;
 
     public RandomAccessFileInputStream(File file) throws FileNotFoundException {
-        randomAccessFile = new RandomAccessFile(file, "r");
+        this(new RandomAccessFile(file, "r"));
+    }
+
+    public RandomAccessFileInputStream(RandomAccessFile randomAccessFile) {
+        this.randomAccessFile = randomAccessFile;
     }
 
     @Override
@@ -31,7 +35,7 @@ public class RandomAccessFileInputStream extends InputStream {
     @Override
     public int available() throws IOException {
         long a = (limit >= 0 ? Math.min(limit, randomAccessFile.length()) : randomAccessFile.length()) - randomAccessFile.getFilePointer();
-        return a < 0 ? 0 : (int) a;
+        return (int) Math.min(Integer.MAX_VALUE, Math.max(a, 0));
     }
 
     @Override
