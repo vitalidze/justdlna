@@ -87,6 +87,7 @@ public class Server extends NanoHTTPD {
 
                     Response res = createResponse(Response.Status.PARTIAL_CONTENT, node.getFormat().getMime(), fis);
                     res.addHeader("Content-Length", Integer.toString(fis.available()));
+                    res.addHeader("File-Size", Long.toString(fileLen));
                     res.addHeader("Content-Range", "bytes " + startFrom + "-" + endAt + "/" + fileLen);
                     res.addHeader("ETag", etag);
                     dumpHeaders(res);
@@ -99,6 +100,7 @@ public class Server extends NanoHTTPD {
 
                 Response res = createResponse(Response.Status.OK, node.getFormat().getMime(), new RandomAccessFileInputStream(file));
                 res.addHeader("Content-Length", "" + fileLen);
+                res.addHeader("File-Size", Long.toString(fileLen));
                 res.addHeader("ETag", etag);
                 dumpHeaders(res);
                 ViewLog.log(file, node.getParent().getFormatClass());
