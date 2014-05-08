@@ -83,6 +83,14 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <repositories>
+        <repository>
+           <id>teleal</id>
+           <name>teleal</name>
+           <url>http://4thline.org/m2/</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>
