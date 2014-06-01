@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Ratchet template page</title>
+    <title>justDLNA Media Browser</title>
 
     <!-- Sets initial viewport load and disables zooming  -->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
@@ -16,6 +16,9 @@
 
     <!-- Include the compiled Ratchet JS -->
     <script src="js/ratchet.js"></script>
+
+    <!-- custom JS -->
+    <script src="js/justdlna.js"></script>
 </head>
 <body>
 
@@ -28,26 +31,17 @@
 <div class="content">
     <div class="card">
         <ul class="table-view">
-            <li class="table-view-cell">
-                <a class="push-right" href="#">
-                    Last added
-                </a>
-            </li>
-            <li class="table-view-cell">
-                <a class="push-right" href="#">
-                    Movies
-                </a>
-            </li>
-            <li class="table-view-cell">
-                <a class="push-right" href="#">
-                    Series
-                </a>
-            </li>
-            <li class="table-view-cell">
-                <a class="push-right" href="#">
-                    Multfilms
-                </a>
-            </li>
+            <script type="text/javascript">
+                var folders = makeRequest(null);
+                console.log(folders);
+                for (var i = 0; i < folders.length; i++) {
+                    document.write("<li class=\"table-view-cell\">");
+                    document.write("<a class=\"push-right\" href=\"index.html?" + folders[i].id + "\">");
+                    document.write(folders[i].title);
+                    document.write("</a>");
+                    document.write("</li>");
+                }
+            </script>
         </ul>
     </div>
 </div>

@@ -62,6 +62,10 @@ public abstract class ContainerNode extends ContentNode {
         this.title = title;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public ItemNode getItem(File f) {
         return null;
     }
