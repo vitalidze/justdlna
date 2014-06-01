@@ -1,6 +1,8 @@
 package su.litvak.justdlna.http;
 
-import fi.iki.elonen.NanoHTTPD;
+import fi.iki.elonen.NanoHTTPD.IHTTPSession;
+import fi.iki.elonen.NanoHTTPD.Method;
+import fi.iki.elonen.NanoHTTPD.Response;
 import mockit.Mocked;
 import mockit.NonStrictExpectations;
 import mockit.Tested;
@@ -22,7 +24,7 @@ import static org.junit.Assert.*;
 public class ServerTest extends AbstractTest {
     @Tested ContentDirectoryService service;
     @Tested Server server;
-    @Mocked NanoHTTPD.IHTTPSession session;
+    @Mocked IHTTPSession session;
     FolderNode<VideoFormat> folder;
     final String TEST_CONTENT = "TST_CONTENT" + System.currentTimeMillis();
 
@@ -33,15 +35,15 @@ public class ServerTest extends AbstractTest {
         FileHelper.write(TEST_CONTENT, mockFile("Sub file", VideoFormat.MKV, folder));
 
         new NonStrictExpectations() {{
-            session.getUri(); result = "/" + folder.getItems().get(0).getId();
-            session.getMethod(); result = NanoHTTPD.Method.GET;
+            session.getUri(); result = "/s/" + folder.getItems().get(0).getId();
+            session.getMethod(); result = Method.GET;
         }};
     }
 
     @Test
     public void testRetrieving() throws Exception {
         service.browse(ROOT_ID, BrowseFlag.DIRECT_CHILDREN, null, 0, 1, null);
-        NanoHTTPD.Response response = server.serve(session);
+        Response response = server.serve(session);
 
         assertEquals(TEST_CONTENT, StreamHelper.toString(response.getData()));
         assertEquals(TEST_CONTENT.length(), Integer.parseInt(getHeader(response, "Content-Length")));
@@ -54,7 +56,7 @@ public class ServerTest extends AbstractTest {
         }};
 
         service.browse(ROOT_ID, BrowseFlag.DIRECT_CHILDREN, null, 0, 1, null);
-        NanoHTTPD.Response response = server.serve(session);
+        Response response = server.serve(session);
 
         assertEquals(TEST_CONTENT, StreamHelper.toString(response.getData()));
         assertEquals(TEST_CONTENT.length(), Integer.parseInt(getHeader(response, "Content-Length")));
@@ -68,7 +70,7 @@ public class ServerTest extends AbstractTest {
         }};
 
         service.browse(ROOT_ID, BrowseFlag.DIRECT_CHILDREN, null, 0, 1, null);
-        NanoHTTPD.Response response = server.serve(session);
+        Response response = server.serve(session);
 
         assertEquals(TEST_CONTENT.substring(4), StreamHelper.toString(response.getData()));
         assertEquals(TEST_CONTENT.length() - 4, Integer.parseInt(getHeader(response, "Content-Length")));
@@ -82,18 +84,40 @@ public class ServerTest extends AbstractTest {
         }};
 
         service.browse(ROOT_ID, BrowseFlag.DIRECT_CHILDREN, null, 0, 1, null);
-        NanoHTTPD.Response response = server.serve(session);
+        Response response = server.serve(session);
 
         assertEquals(TEST_CONTENT.substring(4, 9), StreamHelper.toString(response.getData()));
         assertEquals(5, Integer.parseInt(getHeader(response, "Content-Length")));
         assertEquals("bytes 4-8/" + TEST_CONTENT.length(), getHeader(response, "Content-Range"));
     }
 
-    private String getHeader(NanoHTTPD.Response response, String name) throws NoSuchFieldException, IllegalAccessException {
+    @Test
+    public void testIncorrectURL(@Mocked final IHTTPSession session) throws Exception {
+        new NonStrictExpectations() {{
+            session.getUri(); result = "/s";
+            session.getMethod(); result = Method.GET;
+        }};
+
+        Response response = server.serve(session);
+        assertEquals("Incorrect URL", StreamHelper.toString(response.getData()));
+    }
+
+    @Test
+    public void testNotExistingHandler(@Mocked final IHTTPSession session) throws Exception {
+        new NonStrictExpectations() {{
+            session.getUri(); result = "/not_existing/";
+            session.getMethod(); result = Method.GET;
+        }};
+
+        Response response = server.serve(session);
+        assertEquals("Unable to find correct handler", StreamHelper.toString(response.getData()));
+    }
+
+    private String getHeader(Response response, String name) throws NoSuchFieldException, IllegalAccessException {
         return getHeaders(response).get(name);
     }
 
-    private Map<String, String> getHeaders(NanoHTTPD.Response response) throws NoSuchFieldException, IllegalAccessException {
+    private Map<String, String> getHeaders(Response response) throws NoSuchFieldException, IllegalAccessException {
         Field field = response.getClass().getDeclaredField("header");
         field.setAccessible(true);
         return (Map<String, String>) field.get(response);

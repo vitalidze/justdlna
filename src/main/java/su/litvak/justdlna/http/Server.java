@@ -10,20 +10,28 @@ import su.litvak.justdlna.model.ViewLog;
 import su.litvak.justdlna.util.RandomAccessFileInputStream;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Server extends NanoHTTPD {
     private static final Logger LOG = LoggerFactory.getLogger(Server.class);
+    private final Pattern URL_PREFIX = Pattern.compile("(/\\w+/).*");
+    private Map<String, Handler> handlers;
 
     public Server() {
         super(Config.get().getHttpPort());
+
+        handlers = new HashMap<String, Handler>();
+        handlers.put(MediaStreamHandler.PREFIX, new MediaStreamHandler());
     }
 
     @Override
-    public Response serve(IHTTPSession session) {
-        Map<String, String> header = session.getHeaders();
+    public NanoHTTPD.Response serve(NanoHTTPD.IHTTPSession session) {
         Map<String, String> parms = session.getParms();
+        Map<String, String> header = session.getHeaders();
         String uri = session.getUri();
 
         if (LOG.isDebugEnabled()) {
@@ -41,95 +49,16 @@ public class Server extends NanoHTTPD {
             }
         }
 
-        final ItemNode node = (ItemNode) NodesMap.get(uri.replaceFirst("/", ""));
-        if (node == null) {
-            return createResponse(Response.Status.NOT_FOUND, NanoHTTPD.MIME_PLAINTEXT, "Error 404, file not found.");
+        Matcher m = URL_PREFIX.matcher(uri);
+        if (!m.matches()) {
+            return new Response(Response.Status.BAD_REQUEST, "text/plain", "Incorrect URL");
         }
 
-        File file = node.getFile();
-        try {
-            String etag = Integer.toHexString((file.getAbsolutePath() + file.lastModified() + "" + file.length()).hashCode());
-
-            // Support (simple) skipping:
-            long startFrom = 0;
-            long endAt = -1;
-            String range = header.get("range");
-            if (range != null) {
-                if (range.startsWith("bytes=")) {
-                    range = range.substring("bytes=".length());
-                    int minus = range.indexOf('-');
-                    try {
-                        if (minus > 0) {
-                            startFrom = Long.parseLong(range.substring(0, minus));
-                            endAt = Long.parseLong(range.substring(minus + 1));
-                        }
-                    } catch (NumberFormatException ignored) {
-                    }
-                }
-            }
-
-            // Change return code and add Content-Range header when skipping is requested
-            long fileLen = file.length();
-            if (range != null && startFrom >= 0) {
-                if (startFrom >= fileLen) {
-                    Response res = createResponse(Response.Status.RANGE_NOT_SATISFIABLE, NanoHTTPD.MIME_PLAINTEXT, "");
-                    res.addHeader("Content-Range", "bytes 0-0/" + fileLen);
-                    res.addHeader("ETag", etag);
-                    return res;
-                } else {
-                    if (endAt < 0) {
-                        endAt = fileLen - 1;
-                    }
-
-                    RandomAccessFileInputStream fis = new RandomAccessFileInputStream(file);
-                    fis.seek(startFrom);
-                    fis.limit(endAt + 1);
-
-                    Response res = createResponse(Response.Status.PARTIAL_CONTENT, node.getFormat().getMime(), fis);
-                    res.addHeader("Content-Length", Integer.toString(fis.available()));
-                    res.addHeader("File-Size", Long.toString(fileLen));
-                    res.addHeader("Content-Range", "bytes " + startFrom + "-" + endAt + "/" + fileLen);
-                    res.addHeader("ETag", etag);
-                    dumpHeaders(res);
-                    ViewLog.log(file, node.getParent().getFormatClass());
-                    return res;
-                }
-            } else {
-                if (etag.equals(header.get("if-none-match")))
-                    return createResponse(Response.Status.NOT_MODIFIED, node.getFormat().getMime(), "");
-
-                Response res = createResponse(Response.Status.OK, node.getFormat().getMime(), new RandomAccessFileInputStream(file));
-                res.addHeader("Content-Length", "" + fileLen);
-                res.addHeader("File-Size", Long.toString(fileLen));
-                res.addHeader("ETag", etag);
-                dumpHeaders(res);
-                ViewLog.log(file, node.getParent().getFormatClass());
-                return res;
-            }
-        } catch (IOException ioe) {
-            return createResponse(Response.Status.INTERNAL_ERROR, NanoHTTPD.MIME_PLAINTEXT, "FORBIDDEN: Reading file failed.");
+        String prefix = m.group(1);
+        Handler handler = handlers.get(prefix);
+        if (handler == null) {
+            return new Response(Response.Status.NOT_FOUND, "text/plain", "Unable to find correct handler");
         }
-    }
-
-    // Announce that the file server accepts partial content requests
-    private Response createResponse(Response.Status status, String mimeType, InputStream message) {
-        Response res = new Response(status, mimeType, message);
-        res.addHeader("Accept-Ranges", "bytes");
-        return res;
-    }
-
-    private Response createResponse(Response.Status status, String mimeType, String message) {
-        Response res = new Response(status, mimeType, message);
-        res.addHeader("Accept-Ranges", "bytes");
-        return res;
-    }
-
-    private void dumpHeaders(Response response) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("RESPONSE HEADERS:");
-            for (Map.Entry<String, String> entry : response.getHeaders().entrySet()) {
-                LOG.debug("{} = {}", entry.getKey(), entry.getValue());
-            }
-        }
+        return handler.serve(session);
     }
 }

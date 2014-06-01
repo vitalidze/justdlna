@@ -1,6 +1,7 @@
 package su.litvak.justdlna.dlna;
 
 import org.junit.Test;
+import su.litvak.justdlna.Config;
 import su.litvak.justdlna.model.*;
 
 import java.io.IOException;
@@ -74,5 +75,13 @@ public class FolderNodeTest extends AbstractTest {
 
         assertTrue(video.getContainers().isEmpty());
         assertTrue(video.getItems().isEmpty());
+    }
+
+    @Test
+    public void testItemUrl() throws IOException {
+        FolderNode<AudioFormat> audio = mockDir("Audios", AudioFormat.class);
+        mockFile("test", AudioFormat.MP3, audio);
+        ItemNode item = audio.getItems().get(0);
+        assertEquals("http://" + Config.get().getIpAddress() + ":" + Config.get().getHttpPort() + "/s/" + item.getId(), item.getItem().getFirstResource().getValue());
     }
 }
