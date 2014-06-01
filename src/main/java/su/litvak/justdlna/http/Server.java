@@ -26,6 +26,7 @@ public class Server extends NanoHTTPD {
 
         handlers = new HashMap<String, Handler>();
         handlers.put(MediaStreamHandler.PREFIX, new MediaStreamHandler());
+        handlers.put(MediaBrowserHandler.PREFIX, new MediaBrowserHandler());
     }
 
     @Override
