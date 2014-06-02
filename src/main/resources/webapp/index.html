@@ -24,24 +24,15 @@
 
 <!-- Make sure all your bars are the first things in your <body> -->
 <header class="bar bar-nav">
+    {{up_one_level}}
     <h1 class="title">justDLNA</h1>
 </header>
 
 <!-- Wrap all non-bar HTML in the .content div (this is actually what scrolls) -->
 <div class="content">
     <div class="card">
-        <ul class="table-view">
-            <script type="text/javascript">
-                var folders = makeRequest(null);
-                console.log(folders);
-                for (var i = 0; i < folders.length; i++) {
-                    document.write("<li class=\"table-view-cell\">");
-                    document.write("<a class=\"push-right\" href=\"index.html?" + folders[i].id + "\">");
-                    document.write(folders[i].title);
-                    document.write("</a>");
-                    document.write("</li>");
-                }
-            </script>
+        <ul class="table-view" id="tbl-files">
+            {{file_list}}
         </ul>
     </div>
 </div>

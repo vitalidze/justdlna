@@ -19,3 +19,19 @@ function makeRequest(id) {
     req.send(null);
     return eval(req.responseText);
 }
+
+function writeFoldersList() {
+    var folders = makeRequest(null);
+    var fileTable = document.getElementById("tbl-files");
+    console.log(fileTable);
+    var s = "";
+    for (var i = 0; i < folders.length; i++) {
+        s += "<li class=\"table-view-cell\">";
+        s += "<a class=\"push-right\" href=\"index.html?" + folders[i].id + "\" data-transition=\"slide-in\">";
+        s += folders[i].title;
+        s += " (" + window.location.search + ")";
+        s += "</a>";
+        s += "</li>";
+    }
+    fileTable.innerHTML = s;
+}
