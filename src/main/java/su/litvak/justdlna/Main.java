@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.teleal.cling.UpnpService;
 import org.teleal.cling.UpnpServiceImpl;
+import su.litvak.justdlna.chromecast.Chromecasts;
+import su.litvak.justdlna.chromecast.DeviceFinder;
+import su.litvak.justdlna.chromecast.DeviceFinderListener;
+import su.litvak.justdlna.chromecast.TrackedDialServers;
 import su.litvak.justdlna.dlna.MediaServer;
 import su.litvak.justdlna.http.Server;
 import su.litvak.justdlna.model.ContainerNode;
@@ -70,6 +74,32 @@ public class Main {
         final Server server = new Server();
         server.start();
         LOG.info("HTTP server started");
+
+        /**
+         * Start up chromecast discovery service
+         */
+        LOG.info("Starting ChromeCast discovery...");
+        Thread t = new Thread("ChromCast discovery") {
+            @Override
+            public void run() {
+                DeviceFinder finder = new DeviceFinder(new DeviceFinderListener() {
+                    @Override
+                    public void discoveringDevices(DeviceFinder deviceFinder) {
+                    }
+
+                    @Override
+                    public void discoveredDevices(DeviceFinder deviceFinder) {
+                        Chromecasts.put(deviceFinder.getTrackedDialServers());
+                    }
+                });
+
+                while (true) {
+                    finder.discoverDevices();
+                }
+            }
+        };
+        t.start();
+        LOG.info("ChromeCast discovery started");
 
         /**
          * Register shutdown hook

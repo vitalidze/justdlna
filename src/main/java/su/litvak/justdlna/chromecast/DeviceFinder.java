@@ -50,25 +50,20 @@ public class DeviceFinder implements BroadcastDiscoveryHandler {
 		broadcastClient = new BroadcastDiscoveryClient(this);
 		broadcastClientThread = new Thread(broadcastClient);
 
-		// discovering devices can take time, so do it in a thread
-		new Thread(new Runnable() {
-			public void run() {
-				try {
-					deviceFinderListener.discoveringDevices(DeviceFinder.this);
-					broadcastClientThread.start();
+        try {
+            deviceFinderListener.discoveringDevices(DeviceFinder.this);
+            broadcastClientThread.start();
 
-					// wait a while...
-					// TODO do this better
-					Thread.sleep(DISCOVERY_PERIOD);
+            // wait a while...
+            // TODO do this better
+            Thread.sleep(DISCOVERY_PERIOD);
 
-					broadcastClient.stop();
+            broadcastClient.stop();
 
-					deviceFinderListener.discoveredDevices(DeviceFinder.this);
-				} catch (InterruptedException e) {
-					Log.e(LOG_TAG, "discoverDevices", e);
-				}
-			}
-		}).start();
+            deviceFinderListener.discoveredDevices(DeviceFinder.this);
+        } catch (InterruptedException e) {
+            Log.e(LOG_TAG, "discoverDevices", e);
+        }
 	}
 
 	public void onBroadcastFound(final BroadcastAdvertisement advert) {
