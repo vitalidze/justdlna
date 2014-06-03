@@ -13,8 +13,8 @@
  */
 package su.litvak.justdlna.chromecast;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * Map Android style logging to Java style logging
@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * @author leon_nicholls
  */
 public class Log {
-	private static Logger Log = Logger.getLogger("anymote");
+	private static Logger Log = LoggerFactory.getLogger("anynote");
 	private static boolean verbose = false;
 
 	public static void setVerbose(boolean enabled) {
@@ -35,62 +35,61 @@ public class Log {
 
 	public static void e(String tag, String message, Throwable e) {
 		if (verbose) {
-			Log.log(Level.SEVERE, tag + ": " + message, e);
+			Log.error(tag + ": " + message, e);
 		}
 	}
 
 	public static void e(String tag, String message) {
 		if (verbose) {
-			Log.log(Level.SEVERE, tag + ": " + message);
+			Log.error(tag + ": " + message);
 		}
 	}
 
 	public static void i(String tag, String message, Throwable e) {
 		if (verbose) {
-			Log.log(Level.INFO, tag + ": " + message, e);
+			Log.info(tag + ": " + message, e);
 		}
 	}
 
 	public static void i(String tag, String message) {
 		if (verbose) {
-			Log.log(Level.INFO, tag + ": " + message);
+			Log.info(tag + ": " + message);
 		}
 	}
 
 	public static void d(String tag, String message, Throwable e) {
 		if (verbose) {
-			Log.log(Level.CONFIG, tag + ": " + message, e);
+			Log.debug(tag + ": " + message, e);
 		}
 	}
 
 	public static void d(String tag, String message) {
 		if (verbose) {
-			Log.log(Level.CONFIG, tag + ": " + message);
-			System.out.println(tag + ": " + message); // TODO
+			Log.debug(tag + ": " + message);
 		}
 	}
 
 	public static void v(String tag, String message, Throwable e) {
 		if (verbose) {
-			Log.log(Level.FINEST, tag + ": " + message, e);
+			Log.trace(tag + ": " + message, e);
 		}
 	}
 
 	public static void v(String tag, String message) {
 		if (verbose) {
-			Log.log(Level.FINEST, tag + ": " + message);
+			Log.trace(tag + ": " + message);
 		}
 	}
 
 	public static void w(String tag, String message, Throwable e) {
 		if (verbose) {
-			Log.log(Level.WARNING, tag + ": " + message, e);
+			Log.warn(tag + ": " + message, e);
 		}
 	}
 
 	public static void w(String tag, String message) {
 		if (verbose) {
-			Log.log(Level.WARNING, tag + ": " + message);
+			Log.warn(tag + ": " + message);
 		}
 	}
 }
