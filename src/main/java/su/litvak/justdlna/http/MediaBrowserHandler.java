@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.litvak.justdlna.Config;
 import su.litvak.justdlna.model.ContainerNode;
-import su.litvak.justdlna.model.FolderNode;
 import su.litvak.justdlna.model.ItemNode;
 import su.litvak.justdlna.model.NodesMap;
 import su.litvak.justdlna.util.StreamHelper;
@@ -84,6 +83,7 @@ public class MediaBrowserHandler implements Handler {
 
             String result = INDEX_HTML
                     .replace("{{file_list}}", fileList.toString())
+                    .replace("{{title}}", container.getParent() == null ? Config.APPNAME : container.getTitle())
                     .replace("{{up_one_level}}", container.getParent() == null ? "" : "<a class=\"icon icon-left-nav pull-left\" href=\"?folder=" + container.getParent().getId() + "\" data-transition=\"slide-out\"></a>");
             return new NanoHTTPD.Response(NanoHTTPD.Response.Status.OK, "text/html", result);
         } else {
