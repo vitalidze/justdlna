@@ -37,7 +37,9 @@ public class RESTApiHandler implements Handler {
                 list.add(next);
             }
             return new NanoHTTPD.Response(NanoHTTPD.Response.Status.OK, "application/json", list.toJSONString());
-        } else if (uri.startsWith("browse")) {
+        } else if (uri.equals("castplay")) {
+            // TODO
+        } else if (uri.equals("browse")) {
             String folderId = session.getParms().get("folder");
             ContainerNode container = (ContainerNode) (folderId == null ? null : NodesMap.get(folderId));
             if (container == null) {

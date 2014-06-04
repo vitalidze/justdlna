@@ -41,13 +41,20 @@
                       <ul id="file-list">
                           {{#each files}}
                           <li>
-                              <a href="?folder={{this.id}}&title={{this.title}}" class="item-link">
-                                  <div class="item-content">
-                                      <div class="item-inner">
-                                          <div class="item-title">{{this.title}}</div>
-                                      </div>
+                              {{#if this.folder}}
+                              <a href="?folder={{this.id}}&title={{this.title}}" class="item-link item-content">
+                                  <div class="item-inner">
+                                      <div class="item-title">{{this.title}}</div>
                                   </div>
                               </a>
+                              {{else}}
+                              <a href="#" class="item-link item-content" id="{{this.id}}">
+                                  <div class="item-media"><i class="icon icon-chromecast"></i></div>
+                                  <div class="item-inner">
+                                      <div class="item-title">{{this.title}}</div>
+                                  </div>
+                              </a>
+                              {{/if}}
                           </li>
                           {{/each}}
                       </ul>
