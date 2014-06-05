@@ -5,16 +5,18 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.teleal.cling.UpnpService;
 import org.teleal.cling.UpnpServiceImpl;
-import su.litvak.justdlna.chromecast.Chromecasts;
 import su.litvak.justdlna.chromecast.DeviceFinder;
 import su.litvak.justdlna.chromecast.DeviceFinderListener;
 import su.litvak.justdlna.chromecast.TrackedDialServers;
+import su.litvak.justdlna.chromecast.v2.ChromeCast;
+import su.litvak.justdlna.chromecast.v2.ChromeCasts;
 import su.litvak.justdlna.dlna.MediaServer;
 import su.litvak.justdlna.http.Server;
 import su.litvak.justdlna.model.ContainerNode;
 import su.litvak.justdlna.model.NodesMap;
 import su.litvak.justdlna.model.ViewLog;
 
+import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -79,26 +81,7 @@ public class Main {
          * Start up chromecast discovery service
          */
         LOG.info("Starting ChromeCast discovery...");
-        Thread t = new Thread("ChromCast discovery") {
-            @Override
-            public void run() {
-                DeviceFinder finder = new DeviceFinder(new DeviceFinderListener() {
-                    @Override
-                    public void discoveringDevices(DeviceFinder deviceFinder) {
-                    }
-
-                    @Override
-                    public void discoveredDevices(DeviceFinder deviceFinder) {
-                        Chromecasts.put(deviceFinder.getTrackedDialServers());
-                    }
-                });
-
-                while (true) {
-                    finder.discoverDevices();
-                }
-            }
-        };
-        t.start();
+        ChromeCasts.startDiscovery();
         LOG.info("ChromeCast discovery started");
 
         /**
@@ -116,6 +99,13 @@ public class Main {
                     server.stop();
                 } catch (Exception ex) {
                     LOG.error("Error occurred during HTTP server shutdown", ex);
+                }
+
+                LOG.info("Shutting down ChromeCast discovery");
+                try {
+                    ChromeCasts.stopDiscovery();
+                } catch (IOException ex) {
+                    LOG.error("Error occurred during ChromeCast discovery shutdown", ex);
                 }
             }
         });

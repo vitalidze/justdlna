@@ -1,18 +1,21 @@
 package su.litvak.justdlna.http;
 
 import fi.iki.elonen.NanoHTTPD;
-import org.codehaus.jackson.JsonNode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.litvak.justdlna.Config;
-import su.litvak.justdlna.chromecast.Chromecasts;
+import su.litvak.justdlna.chromecast.v2.ChromeCast;
+import su.litvak.justdlna.chromecast.v2.ChromeCasts;
 import su.litvak.justdlna.chromecast.DialServer;
+import su.litvak.justdlna.chromecast.Platform;
+import su.litvak.justdlna.chromecast.Playback;
 import su.litvak.justdlna.model.ContainerNode;
 import su.litvak.justdlna.model.ItemNode;
 import su.litvak.justdlna.model.NodesMap;
 
+import java.net.InetAddress;
 import java.util.List;
 
 public class RESTApiHandler implements Handler {
@@ -25,20 +28,23 @@ public class RESTApiHandler implements Handler {
 
         if (uri.equals("castlist")) {
             JSONArray list = new JSONArray();
-            for (DialServer chromecast : Chromecasts.get()) {
+            for (ChromeCast chromecast : ChromeCasts.get()) {
                 JSONObject next = new JSONObject();
-                next.put("name", chromecast.getFriendlyName());
-                next.put("ip_address", chromecast.getIpAddress().getHostAddress());
+                next.put("name", chromecast.getName());
+                next.put("ip_address", chromecast.getIpAddress());
                 next.put("port", chromecast.getPort());
                 next.put("apps_url", chromecast.getAppsUrl());
-                next.put("location", chromecast.getLocation());
-                next.put("manufacturer", chromecast.getManufacturer());
-                next.put("model_name", chromecast.getModelName());
+                next.put("application", chromecast.getApplication());
                 list.add(next);
             }
             return new NanoHTTPD.Response(NanoHTTPD.Response.Status.OK, "application/json", list.toJSONString());
         } else if (uri.equals("castplay")) {
-            // TODO
+            try {
+                Playback playback = new Playback(new Platform(), "F6A9FD85", new DialServer(InetAddress.getByName(session.getParms().get("castip"))), null);
+                playback.stream("http://192.168.10.4:8192/s/" + session.getParms().get("media"));
+            } catch (Exception ex) {
+                LOG.error("Unable to stream", ex);
+            }
         } else if (uri.equals("browse")) {
             String folderId = session.getParms().get("folder");
             ContainerNode container = (ContainerNode) (folderId == null ? null : NodesMap.get(folderId));
