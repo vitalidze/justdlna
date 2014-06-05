@@ -84,6 +84,12 @@
             <version>3.4.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
         <!-- Testing. -->
         <dependency>
             <groupId>com.googlecode.jmockit</groupId>
