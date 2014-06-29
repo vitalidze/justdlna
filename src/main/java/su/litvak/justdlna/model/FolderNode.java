@@ -79,6 +79,9 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends VirtualFolderNo
         } else if (!folder.isDirectory()) {
             LOG.warn("{} is not a directory", folder);
             return EMPTY_FILE_ARR;
+        } else if (!folder.canRead() && !folder.canExecute()) {
+            LOG.debug("Folder {} is not accessible", folder.getAbsolutePath());
+            return EMPTY_FILE_ARR;
         }
         return folder.listFiles();
     }

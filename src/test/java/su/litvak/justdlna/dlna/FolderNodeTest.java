@@ -1,8 +1,12 @@
 package su.litvak.justdlna.dlna;
 
+import mockit.Expectations;
+import mockit.Mocked;
+import mockit.NonStrictExpectations;
 import org.junit.Test;
 import su.litvak.justdlna.model.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -74,5 +78,20 @@ public class FolderNodeTest extends AbstractTest {
 
         assertTrue(video.getContainers().isEmpty());
         assertTrue(video.getItems().isEmpty());
+    }
+
+    @Test
+    public void testNotAccessibleFolder(@Mocked final File folder) {
+        new NonStrictExpectations() {{
+            folder.exists(); result = true;
+            folder.isDirectory(); result = true;
+            folder.canRead(); times = 2; result = false;
+            folder.canExecute(); times = 2; result = false;
+            folder.getAbsolutePath(); result = "/video";
+            folder.getName(); result = "video";
+        }};
+        FolderNode<VideoFormat> folderNode = new FolderNode<VideoFormat>(folder, VideoFormat.class);
+        assertTrue(folderNode.getContainers().isEmpty());
+        assertTrue(folderNode.getItems().isEmpty());
     }
 }
