@@ -55,4 +55,23 @@ public class ContentDirectoryServiceTest extends AbstractTest {
         assertNotNull(NodesMap.get(didl.getItems().get(0).getId()));
         assertNotNull(NodesMap.get(didl.getItems().get(1).getId()));
 	}
+
+    @Test
+    public void checkBrowse10_10() throws Exception {
+        FolderNode<VideoFormat> folderNode = mockDir("Video", VideoFormat.class);
+        NodesMap.put(ROOT_ID, new VirtualFolderNode(Arrays.<ContainerNode>asList(folderNode)));
+        for (int i = 0; i < 11; i++) {
+            mockFile("Test " + (i < 10 ? "0" : "") + i, VideoFormat.AVI, folderNode);
+        }
+
+        /**
+         * Browse root to initialize sub-folders
+         */
+        service.browse(ROOT_ID, BrowseFlag.DIRECT_CHILDREN, null, 0, 1, null);
+
+        // check big indices
+        service.browse(ROOT_ID, BrowseFlag.DIRECT_CHILDREN, null, 10, 10, null);
+
+        BrowseResult ret = service.browse(folderNode.getId(), BrowseFlag.DIRECT_CHILDREN, null, 10, 10, null);
+    }
 }
