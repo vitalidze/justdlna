@@ -2,6 +2,7 @@ JustDLNA
 ========
 
 ## Purpose
+
 The main goal is to provide a simple open source implementation of UPNP/DLNA service. From my point of view [current server applications](http://en.wikipedia.org/wiki/List_of_UPnP_AV_media_servers_and_clients#UPnP_AV_media_servers) are over-engineered. This should not be THAT hard to deliver media content over a local network.
 
 ## Features
@@ -18,9 +19,10 @@ The main goal is to provide a simple open source implementation of UPNP/DLNA ser
 
 * range header support for full control of media playback (feature of jetty servlet container)
 
-* low memory requirements (64M in default configuration)
+* low memory requirements (for a Java Application, 64M in default configuration)
 
 ## Configuration file
+
 TODO
 
 ## Building
