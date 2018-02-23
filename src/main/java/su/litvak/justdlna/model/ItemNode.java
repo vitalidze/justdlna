@@ -36,4 +36,9 @@ public class ItemNode extends ContentNode {
     public MediaFormat getFormat() {
         return format;
     }
+
+    @Override
+    public String getTitle() {
+        return file == null ? null : file.getName();
+    }
 }

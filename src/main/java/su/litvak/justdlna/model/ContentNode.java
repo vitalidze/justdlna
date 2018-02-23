@@ -1,6 +1,6 @@
 package su.litvak.justdlna.model;
 
-public abstract class ContentNode {
+public abstract class ContentNode implements Comparable<ContentNode> {
     private String id;
     private ContainerNode parent;
 
@@ -22,5 +22,14 @@ public abstract class ContentNode {
 
     public ContainerNode getParent() {
         return parent;
+    }
+
+    public abstract String getTitle();
+
+    @Override
+    public int compareTo(ContentNode that) {
+        String thisTitle = this.getTitle() == null ? "" : this.getTitle();
+        String thatTitle = that.getTitle() == null ? "" : that.getTitle();
+        return thisTitle.compareTo(thatTitle);
     }
 }

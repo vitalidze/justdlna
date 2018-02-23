@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
                @JsonSubTypes.Type (name="last-viewed", value=LastViewedNode.class),
                @JsonSubTypes.Type (name="virtual", value=VirtualFolderNode.class)})
 public abstract class ContainerNode extends ContentNode {
-    static AtomicInteger idGenerator = new AtomicInteger(0);
+    static final AtomicInteger idGenerator = new AtomicInteger(0);
     private String title;
 
     public ContainerNode(String id, String title) {
@@ -43,7 +43,7 @@ public abstract class ContainerNode extends ContentNode {
         container.setRestricted(true);
         container.setSearchable(true);
         container.setWriteStatus(WriteStatus.NOT_WRITABLE);
-        container.setChildCount(Integer.valueOf(0));
+        container.setChildCount(0);
         return container;
     }
 
@@ -64,5 +64,10 @@ public abstract class ContainerNode extends ContentNode {
 
     public ItemNode getItem(File f) {
         return null;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
     }
 }

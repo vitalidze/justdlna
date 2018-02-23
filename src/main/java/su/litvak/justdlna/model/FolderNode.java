@@ -6,8 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static su.litvak.justdlna.util.HashHelper.sha1;
 
@@ -16,7 +15,7 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends VirtualFolderNo
 
     final File folder;
     final Class<T> formatClass;
-    final static File[] EMPTY_FILE_ARR = new File[0];
+    static final File[] EMPTY_FILE_ARR = new File[0];
 
     @JsonCreator
     public FolderNode(@JsonProperty("title")
@@ -45,13 +44,14 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends VirtualFolderNo
         List<ContainerNode> result = new ArrayList<ContainerNode>(super.getContainers());
         for (File file : listFiles()) {
             if (file.isDirectory()) {
-                FolderNode subFolder = new FolderNode(file, formatClass);
+                FolderNode<T> subFolder = new FolderNode<T>(file, formatClass);
                 if (!subFolder.getItems().isEmpty() || !subFolder.getContainers().isEmpty()) {
                     result.add(subFolder);
                     subFolder.setParent(this);
                 }
             }
         }
+        Collections.sort(result);
         return result;
     }
 
@@ -69,6 +69,7 @@ public class FolderNode<T extends Enum<T> & MediaFormat> extends VirtualFolderNo
                 itemNode.setParent(this);
             }
         }
+        Collections.sort(result);
         return result;
     }
 
