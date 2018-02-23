@@ -2,10 +2,10 @@ package su.litvak.justdlna.dlna;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.teleal.cling.support.contentdirectory.DIDLParser;
-import org.teleal.cling.support.model.BrowseFlag;
-import org.teleal.cling.support.model.BrowseResult;
-import org.teleal.cling.support.model.DIDLContent;
+import org.fourthline.cling.support.contentdirectory.DIDLParser;
+import org.fourthline.cling.support.model.BrowseFlag;
+import org.fourthline.cling.support.model.BrowseResult;
+import org.fourthline.cling.support.model.DIDLContent;
 import su.litvak.justdlna.model.*;
 
 import java.util.Arrays;

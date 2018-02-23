@@ -2,14 +2,14 @@ package su.litvak.justdlna.dlna;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.teleal.cling.binding.annotations.AnnotationLocalServiceBinder;
-import org.teleal.cling.model.DefaultServiceManager;
-import org.teleal.cling.model.ValidationException;
-import org.teleal.cling.model.meta.*;
-import org.teleal.cling.model.types.DeviceType;
-import org.teleal.cling.model.types.UDADeviceType;
-import org.teleal.cling.model.types.UDN;
-import org.teleal.cling.support.connectionmanager.ConnectionManagerService;
+import org.fourthline.cling.binding.annotations.AnnotationLocalServiceBinder;
+import org.fourthline.cling.model.DefaultServiceManager;
+import org.fourthline.cling.model.ValidationException;
+import org.fourthline.cling.model.meta.*;
+import org.fourthline.cling.model.types.DeviceType;
+import org.fourthline.cling.model.types.UDADeviceType;
+import org.fourthline.cling.model.types.UDN;
+import org.fourthline.cling.support.connectionmanager.ConnectionManagerService;
 import su.litvak.justdlna.Config;
 
 /**

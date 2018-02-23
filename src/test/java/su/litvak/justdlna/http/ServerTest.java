@@ -6,7 +6,7 @@ import mockit.NonStrictExpectations;
 import mockit.Tested;
 import org.junit.Before;
 import org.junit.Test;
-import org.teleal.cling.support.model.BrowseFlag;
+import org.fourthline.cling.support.model.BrowseFlag;
 import su.litvak.justdlna.dlna.AbstractTest;
 import su.litvak.justdlna.dlna.ContentDirectoryService;
 import su.litvak.justdlna.model.*;

@@ -1,7 +1,7 @@
 package su.litvak.justdlna.model;
 
-import org.teleal.cling.support.model.Res;
-import org.teleal.cling.support.model.item.Item;
+import org.fourthline.cling.support.model.Res;
+import org.fourthline.cling.support.model.item.Item;
 
 public interface MediaFormat {
     String getMime();

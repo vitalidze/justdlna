@@ -1,6 +1,5 @@
 package su.litvak.justdlna.dlna;
 
-import mockit.Expectations;
 import mockit.Mocked;
 import mockit.NonStrictExpectations;
 import org.junit.Test;

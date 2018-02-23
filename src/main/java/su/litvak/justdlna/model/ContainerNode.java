@@ -2,9 +2,9 @@ package su.litvak.justdlna.model;
 
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.teleal.cling.support.model.DIDLObject;
-import org.teleal.cling.support.model.WriteStatus;
-import org.teleal.cling.support.model.container.Container;
+import org.fourthline.cling.support.model.DIDLObject;
+import org.fourthline.cling.support.model.WriteStatus;
+import org.fourthline.cling.support.model.container.Container;
 import su.litvak.justdlna.Config;
 
 import java.io.File;

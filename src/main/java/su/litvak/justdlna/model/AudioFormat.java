@@ -1,8 +1,8 @@
 package su.litvak.justdlna.model;
 
-import org.teleal.cling.support.model.Res;
-import org.teleal.cling.support.model.item.AudioItem;
-import org.teleal.cling.support.model.item.Item;
+import org.fourthline.cling.support.model.Res;
+import org.fourthline.cling.support.model.item.AudioItem;
+import org.fourthline.cling.support.model.item.Item;
 
 public enum AudioFormat implements MediaFormat {
     MP3("mp3", "audio/mpeg"),

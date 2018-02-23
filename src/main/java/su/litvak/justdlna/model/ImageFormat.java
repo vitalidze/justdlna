@@ -1,8 +1,8 @@
 package su.litvak.justdlna.model;
 
-import org.teleal.cling.support.model.Res;
-import org.teleal.cling.support.model.item.ImageItem;
-import org.teleal.cling.support.model.item.Item;
+import org.fourthline.cling.support.model.Res;
+import org.fourthline.cling.support.model.item.ImageItem;
+import org.fourthline.cling.support.model.item.Item;
 
 public enum ImageFormat implements MediaFormat {
     JPG("jpg", "image/jpeg"),
