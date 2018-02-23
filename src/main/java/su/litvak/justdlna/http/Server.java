@@ -84,13 +84,13 @@ public class Server extends NanoHTTPD {
                     RandomAccessFileInputStream fis = new RandomAccessFileInputStream(file);
                     fis.seek(startFrom);
                     fis.limit(endAt + 1);
+                    int contentLength = fis.available();
 
-                    Response res = createResponse(Response.Status.PARTIAL_CONTENT, node.getFormat().getMime(), fis);
-                    res.addHeader("Content-Length", Integer.toString(fis.available()));
+                    Response res = createResponse(Response.Status.PARTIAL_CONTENT, node.getFormat().getMime(), fis, contentLength);
+                    res.addHeader("Content-Length", Integer.toString(contentLength));
                     res.addHeader("File-Size", Long.toString(fileLen));
                     res.addHeader("Content-Range", "bytes " + startFrom + "-" + endAt + "/" + fileLen);
                     res.addHeader("ETag", etag);
-                    dumpHeaders(res);
                     ViewLog.log(file, node.getParent().getFormatClass());
                     return res;
                 }
@@ -98,11 +98,10 @@ public class Server extends NanoHTTPD {
                 if (etag.equals(header.get("if-none-match")))
                     return createResponse(Response.Status.NOT_MODIFIED, node.getFormat().getMime(), "");
 
-                Response res = createResponse(Response.Status.OK, node.getFormat().getMime(), new RandomAccessFileInputStream(file));
-                res.addHeader("Content-Length", "" + fileLen);
+                Response res = createResponse(Response.Status.OK, node.getFormat().getMime(), new RandomAccessFileInputStream(file), fileLen);
+                res.addHeader("Content-Length", Long.toString(fileLen));
                 res.addHeader("File-Size", Long.toString(fileLen));
                 res.addHeader("ETag", etag);
-                dumpHeaders(res);
                 ViewLog.log(file, node.getParent().getFormatClass());
                 return res;
             }
@@ -112,24 +111,15 @@ public class Server extends NanoHTTPD {
     }
 
     // Announce that the file server accepts partial content requests
-    private Response createResponse(Response.Status status, String mimeType, InputStream message) {
-        Response res = new Response(status, mimeType, message);
+    private Response createResponse(Response.Status status, String mimeType, InputStream message, long contentLength) {
+        Response res = newFixedLengthResponse(status, mimeType, message, contentLength);
         res.addHeader("Accept-Ranges", "bytes");
         return res;
     }
 
     private Response createResponse(Response.Status status, String mimeType, String message) {
-        Response res = new Response(status, mimeType, message);
+        Response res = newFixedLengthResponse(status, mimeType, message);
         res.addHeader("Accept-Ranges", "bytes");
         return res;
-    }
-
-    private void dumpHeaders(Response response) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("RESPONSE HEADERS:");
-            for (Map.Entry<String, String> entry : response.getHeaders().entrySet()) {
-                LOG.debug("{} = {}", entry.getKey(), entry.getValue());
-            }
-        }
     }
 }
